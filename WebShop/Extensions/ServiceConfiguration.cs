@@ -1,5 +1,7 @@
-﻿using Contracts.UnitOfWork;
+﻿using Contracts.DataAccess.UnitOfWork;
+using Contracts.Services.Common.Helpers;
 using DataAccess.UnitOfWork;
+using ServiceLayer.Common.Helpers;
 
 namespace WebShop.Extensions
 {
@@ -8,6 +10,13 @@ namespace WebShop.Extensions
         public static void AddApplicationServices(this IServiceCollection services) 
         {
             AddDataAccess(services);
+
+            AddHelpers(services);
+        }
+
+        private static void AddHelpers(IServiceCollection services)
+        {
+            services.AddScoped<IEnumMapper, EnumMapper>();
         }
 
         private static void AddDataAccess(IServiceCollection services)
