@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Products;
+﻿using Contracts.DataAccess.Repositories.Products;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Products;

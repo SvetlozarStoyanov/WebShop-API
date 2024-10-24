@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.BaseRepository;
+﻿using Contracts.DataAccess.Repositories.BaseRepository;
 using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

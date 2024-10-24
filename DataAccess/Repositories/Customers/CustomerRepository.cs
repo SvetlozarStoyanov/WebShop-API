@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Customers;
+﻿using Contracts.DataAccess.Repositories.Customers;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Customers;

@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Common.Types;
+﻿using Contracts.DataAccess.Repositories.Common.Types;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Common.Types;

@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Addresses;
+﻿using Contracts.DataAccess.Repositories.Addresses;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Addresses;

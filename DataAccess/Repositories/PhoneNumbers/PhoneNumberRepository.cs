@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.PhoneNumbers;
+﻿using Contracts.DataAccess.Repositories.PhoneNumbers;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.PhoneNumbers;

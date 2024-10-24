@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Common.Statuses;
+﻿using Contracts.DataAccess.Repositories.Common.Statuses;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Common.Statuses;

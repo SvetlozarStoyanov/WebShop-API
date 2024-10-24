@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Emails;
+﻿using Contracts.DataAccess.Repositories.Emails;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Emails;

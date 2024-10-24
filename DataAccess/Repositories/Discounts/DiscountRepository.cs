@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Discounts;
+﻿using Contracts.DataAccess.Repositories.Discounts;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Discounts;

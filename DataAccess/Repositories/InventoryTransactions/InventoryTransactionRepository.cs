@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.InventoryTransactions;
+﻿using Contracts.DataAccess.Repositories.InventoryTransactions;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Inventory;

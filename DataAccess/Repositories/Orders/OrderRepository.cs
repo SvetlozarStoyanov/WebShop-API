@@ -1,4 +1,4 @@
-﻿using Contracts.Repositories.Orders;
+﻿using Contracts.DataAccess.Repositories.Orders;
 using DataAccess.Repositories.BaseRepository;
 using Database;
 using Database.Entities.Orders;
