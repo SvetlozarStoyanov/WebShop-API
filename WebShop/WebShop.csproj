@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Entities\Database.csproj" />
+    <ProjectReference Include="..\ServiceLayer\Services.csproj" />
   </ItemGroup>
 
 </Project>
