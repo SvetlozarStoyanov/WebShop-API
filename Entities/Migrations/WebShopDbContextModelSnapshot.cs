@@ -69,7 +69,7 @@ namespace Database.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Country", b =>
+            modelBuilder.Entity("Database.Entities.Common.Country", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -667,7 +667,7 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Entities.Addresses.Address", b =>
                 {
-                    b.HasOne("Database.Entities.Common.Nomenclatures.Country", "Country")
+                    b.HasOne("Database.Entities.Common.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -800,7 +800,7 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Entities.PhoneNumbers.PhoneNumber", b =>
                 {
-                    b.HasOne("Database.Entities.Common.Nomenclatures.Country", "Country")
+                    b.HasOne("Database.Entities.Common.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
