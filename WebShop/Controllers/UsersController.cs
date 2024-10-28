@@ -76,7 +76,12 @@ namespace WebShop.Controllers
                 return BadRequest($"Username - {dto.UserName} is already taken!");
             }
 
-            await customerService.CreateCustomerAsync(user);
+            var operationResult = await customerService.CreateCustomerAsync(user);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult.Errors.First());
+            }
 
             var result = await customUserManager.CreateAsync(user, dto.Password);
             if (result.Succeeded)
