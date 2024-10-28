@@ -1,46 +1,58 @@
-﻿using Contracts.Services.Identity;
+﻿using Contracts.Services.Entity.ApplicationUsers;
+using Contracts.Services.Entity.Customers;
+using Contracts.Services.Identity;
 using Contracts.Services.JWT;
 using Database.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Dto.UserDtos;
+using WebShop.Extensions;
 
 namespace WebShop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly ICustomUserManager customUserManager;
         private readonly RoleManager<ApplicationRole> roleManager;
         private readonly IJwtService jwtService;
+        private readonly ICustomerService customerService;
+        private readonly IApplicationUserService userService;
 
-        public AuthController(ICustomUserManager customUserManager, RoleManager<ApplicationRole> roleManager, IJwtService jWTService)
+        public UsersController(ICustomUserManager customUserManager,
+            RoleManager<ApplicationRole> roleManager,
+            IJwtService jWTService,
+            ICustomerService customerService,
+            IApplicationUserService userService)
         {
             this.customUserManager = customUserManager;
             this.roleManager = roleManager;
             this.jwtService = jWTService;
-
+            this.customerService = customerService;
+            this.userService = userService;
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(UserLoginDto dto)
         {
-            if (User != null)
+            var userId = User.GetId();
+
+            if (userId != null)
             {
                 return BadRequest("Already logged in!");
             }
 
             var user = await customUserManager.FindByNameAsync(dto.UserName);
 
-            if (user == null)
+            if (user == null || !(await customUserManager.CheckPasswordAsync(user, dto.Password)))
             {
-                return BadRequest();
+                return BadRequest("Incorrect username or password!");
             }
 
-            var token = jwtService.GenerateJwtToken(dto.UserName);
+            var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
 
             return Ok(token);
         }
@@ -56,17 +68,20 @@ namespace WebShop.Controllers
                 LastName = dto.LastName,
                 UserName = dto.UserName,
             };
-            //var userNameIsTaken = await customUserManager.Users.AnyAsync(u => u.UserName == model.UserName);
-            //if (userNameIsTaken)
-            //{
-            //    ModelState.AddModelError(string.Empty, "Username already taken!");
-            //    return RedirectToAction(nameof(Register));
-            //}
+
+            var userNameIsTaken = await userService.IsUserNameTakenAsync(dto.UserName);
+
+            if (userNameIsTaken)
+            {
+                return BadRequest($"Username - {dto.UserName} is already taken!");
+            }
+
+            await customerService.CreateCustomerAsync(user);
+
             var result = await customUserManager.CreateAsync(user, dto.Password);
             if (result.Succeeded)
             {
-                //await signInManager.SignInAsync(user, false);
-                var token = jwtService.GenerateJwtToken(user.UserName);
+                var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
                 return Ok(token);
             }
 
