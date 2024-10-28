@@ -7,6 +7,8 @@
             Errors = new List<Error>();
         }
 
+        public bool IsSuccessful => Errors.Any();
+
         public ICollection<Error> Errors { get; set; }
 
         public void AppendError(Error error)
