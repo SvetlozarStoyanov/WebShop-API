@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace WebShop.Extensions
 {
-
-    [ApiController]
     public static class ClaimsPrincipalExtensions
     {
         public static string GetId(this ClaimsPrincipal claimsPrincipal)
