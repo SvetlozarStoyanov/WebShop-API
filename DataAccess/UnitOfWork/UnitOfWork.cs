@@ -1,4 +1,5 @@
 ﻿using Contracts.DataAccess.Repositories.Addresses;
+using Contracts.DataAccess.Repositories.ApplicationUsers;
 using Contracts.DataAccess.Repositories.Common;
 using Contracts.DataAccess.Repositories.Common.Statuses;
 using Contracts.DataAccess.Repositories.Common.Types;
@@ -11,6 +12,7 @@ using Contracts.DataAccess.Repositories.PhoneNumbers;
 using Contracts.DataAccess.Repositories.Products;
 using Contracts.DataAccess.UnitOfWork;
 using DataAccess.Repositories.Addresses;
+using DataAccess.Repositories.ApplicationUsers;
 using DataAccess.Repositories.Common;
 using DataAccess.Repositories.Common.Statuses;
 using DataAccess.Repositories.Common.Types;
@@ -43,6 +45,7 @@ namespace DataAccess.UnitOfWork
         private ICountryRepository countryRepository;
         #endregion
 
+        private IApplicationUserRepository userRepository;
         private IProductRepository productRepository;
         private ICustomerRepository customerRepository;
         private IOrderRepository orderRepository;
@@ -74,6 +77,7 @@ namespace DataAccess.UnitOfWork
         public ICountryRepository CountryRepository => countryRepository ??= new CountryRepository(context);
         #endregion
 
+        public IApplicationUserRepository UserRepository => userRepository ??= new ApplicationUserRepository(context);
         public IProductRepository ProductRepository => productRepository ??= new ProductRepository(context);
         public ICustomerRepository CustomerRepository => customerRepository ??= new CustomerRepository(context);
         public IOrderRepository OrderRepository => orderRepository ??= new OrderRepository(context);

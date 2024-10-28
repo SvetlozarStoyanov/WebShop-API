@@ -1,4 +1,5 @@
 ﻿using Contracts.DataAccess.Repositories.Addresses;
+using Contracts.DataAccess.Repositories.ApplicationUsers;
 using Contracts.DataAccess.Repositories.Common;
 using Contracts.DataAccess.Repositories.Common.Statuses;
 using Contracts.DataAccess.Repositories.Common.Types;
@@ -26,6 +27,7 @@ namespace Contracts.DataAccess.UnitOfWork
         public IProductTypeRepository ProductTypeRepository { get; }
         public ICountryRepository CountryRepository { get; }
         #endregion
+        public IApplicationUserRepository UserRepository { get;}
         public IProductRepository ProductRepository { get; }
         public ICustomerRepository CustomerRepository { get; }
         public IOrderRepository OrderRepository { get; }
