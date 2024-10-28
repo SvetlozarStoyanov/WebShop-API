@@ -30,4 +30,14 @@
             }
         }
     }
+
+    public class OperationResult<T> : OperationResult where T : class
+    {
+        public T Data { get; init; }
+
+        public OperationResult(T data) : base()
+        {
+            Data = data;
+        }
+    }
 }
