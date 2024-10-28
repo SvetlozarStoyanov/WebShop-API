@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using WebShop.Extensions;
+using WebShop.Middleware;
 
 namespace WebShop
 {
@@ -36,6 +37,7 @@ namespace WebShop
             })
                 .AddEntityFrameworkStores<WebShopDbContext>();
 
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,6 +47,7 @@ namespace WebShop
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ClockSkew = TimeSpan.FromSeconds(0),
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -55,10 +58,9 @@ namespace WebShop
                 };
             });
 
-            builder.Services.AddApplicationServices(builder.Configuration);
-
-            builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
+
+            builder.Services.AddApplicationServices(builder.Configuration);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -92,6 +94,8 @@ namespace WebShop
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<ExpiredTokenMiddleware>();
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
