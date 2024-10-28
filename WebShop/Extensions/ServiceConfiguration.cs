@@ -1,10 +1,14 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
 using Contracts.Services.Common.Helpers;
+using Contracts.Services.Entity.ApplicationUsers;
+using Contracts.Services.Entity.Customers;
 using Contracts.Services.Identity;
 using Contracts.Services.JWT;
 using DataAccess.UnitOfWork;
 using Models.Configuration;
 using ServiceLayer.Common.Helpers;
+using Services.Entity.ApplicationUsers;
+using Services.Entity.Customers;
 using Services.Identity.UserManager;
 using Services.JWT;
 
@@ -14,6 +18,8 @@ namespace WebShop.Extensions
     {
         public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configurationManager)
         {
+            AddEntityServices(services);
+
             AddIdentityServices(services);
 
             AddJwtServices(services);
@@ -23,6 +29,13 @@ namespace WebShop.Extensions
             AddDataAccess(services);
 
             AddHelpers(services);
+        }
+
+        private static void AddEntityServices(IServiceCollection services)
+        {
+            services.AddScoped<ICustomerService,CustomerService>();
+
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
         }
 
         private static void AddJwtServices(IServiceCollection services)
