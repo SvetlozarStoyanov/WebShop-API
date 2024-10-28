@@ -4,7 +4,7 @@ namespace Models.Common
 {
     public class Error
     {
-        public Error(string message, ErrorTypes type)
+        public Error(ErrorTypes type, string message)
         {
             Message = message;
             Type = type;
