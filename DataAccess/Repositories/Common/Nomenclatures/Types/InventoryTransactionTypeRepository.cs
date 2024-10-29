@@ -1,9 +1,9 @@
-﻿using Contracts.DataAccess.Repositories.Common.Types;
+﻿using Contracts.DataAccess.Repositories.Common.Nomenclatures.Types;
 using DataAccess.Repositories.BaseRepository;
 using Database;
-using Database.Entities.Common.Types;
+using Database.Entities.Common.Nomenclatures.InventoryTransactions;
 
-namespace DataAccess.Repositories.Common.Types
+namespace DataAccess.Repositories.Common.Nomenclatures.Types
 {
     public class InventoryTransactionTypeRepository : BaseRepository<long, InventoryTransactionType>, IInventoryTransactionTypeRepository
     {

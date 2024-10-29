@@ -1,8 +1,10 @@
 ﻿using Contracts.DataAccess.Repositories.Addresses;
 using Contracts.DataAccess.Repositories.ApplicationUsers;
 using Contracts.DataAccess.Repositories.Common;
-using Contracts.DataAccess.Repositories.Common.Statuses;
-using Contracts.DataAccess.Repositories.Common.Types;
+using Contracts.DataAccess.Repositories.Common.Nomenclatures.Orders;
+using Contracts.DataAccess.Repositories.Common.Nomenclatures.Products;
+using Contracts.DataAccess.Repositories.Common.Nomenclatures.Statuses;
+using Contracts.DataAccess.Repositories.Common.Nomenclatures.Types;
 using Contracts.DataAccess.Repositories.Customers;
 using Contracts.DataAccess.Repositories.Discounts;
 using Contracts.DataAccess.Repositories.Emails;
@@ -19,12 +21,14 @@ namespace Contracts.DataAccess.UnitOfWork
 
         #region Common
         public IOrderStatusRepository OrderStatusRepository { get; }
+        public IOrderDetailsStatusRepository OrderDetailsStatusRepository { get; }
+        public IOrderDetailsStageRepository OrderDetailsStageRepository { get; }
         public IAddressStatusRepository AddressStatusRepository { get; }
         public IPhoneNumberStatusRepository PhoneNumberStatusRepository { get; }
         public IEmailStatusRepository EmailStatusRepository { get; }
         public IDiscountStatusRepository DiscountStatusRepository { get; }
         public IInventoryTransactionTypeRepository InventoryTransactionTypeRepository { get; }
-        public IProductTypeRepository ProductTypeRepository { get; }
+        public IProductCategoryRepository ProductTypeRepository { get; }
         public ICountryRepository CountryRepository { get; }
         #endregion
         public IApplicationUserRepository UserRepository { get;}
@@ -32,6 +36,7 @@ namespace Contracts.DataAccess.UnitOfWork
         public ICustomerRepository CustomerRepository { get; }
         public IOrderRepository OrderRepository { get; }
         public IOrderDetailsRepository OrderDetailsRepository { get; }
+        public IOrderItemRepository OrderItemRepository { get; }
         public IDiscountRepository DiscountRepository { get; }
         public IAddressRepository AddressRepository { get; }
         public IEmailRepository EmailRepository { get; }
