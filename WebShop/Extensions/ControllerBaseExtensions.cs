@@ -5,8 +5,9 @@ namespace WebShop.Extensions
 {
     public static class ControllerBaseExtensions
     {
-        public static IActionResult Error(this ControllerBase controller, Error error)
+        public static IActionResult Error(this ControllerBase controller, OperationResult operationResult)
         {
+            var error = operationResult.Errors.FirstOrDefault();
             return controller.StatusCode(error.StatusCode, error.Message);
         }
     }

@@ -80,7 +80,7 @@ namespace WebShop.Controllers
 
             if (!operationResult.IsSuccessful)
             {
-                return this.Error(operationResult.Errors.First());
+                return this.Error(operationResult);
             }
 
             var result = await customUserManager.CreateAsync(user, dto.Password);

@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{D1D3E7BB-22C3-4C71-AB94-BD8B584B5E9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "ServiceLayer\Services.csproj", "{28054BD5-8159-4316-B914-29B58F9E5CE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "ServiceLayer\Services.csproj", "{28054BD5-8159-4316-B914-29B58F9E5CE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{C3562B34-ADAD-4D44-AD5A-A741EFF3A2FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{C3562B34-ADAD-4D44-AD5A-A741EFF3A2FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
