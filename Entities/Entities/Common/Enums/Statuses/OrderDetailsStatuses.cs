@@ -1,8 +1,9 @@
 ﻿namespace Database.Entities.Common.Enums.Statuses
 {
-    public enum OrderStatuses
+    public enum OrderDetailsStatuses
     {
         Active = 1,
-        Archived = 2,
+        Inactive = 2,
+        Archived = 3,
     }
 }

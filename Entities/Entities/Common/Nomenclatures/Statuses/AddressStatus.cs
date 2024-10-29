@@ -1,6 +1,6 @@
-﻿namespace Database.Entities.Common.Statuses
+﻿namespace Database.Entities.Common.Nomenclatures.Statuses
 {
-    public class OrderStatus
+    public class AddressStatus
     {
         public long Id { get; set; }
         public string Name { get; set; }

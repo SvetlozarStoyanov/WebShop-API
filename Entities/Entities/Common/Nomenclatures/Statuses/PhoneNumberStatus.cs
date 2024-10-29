@@ -1,4 +1,4 @@
-﻿namespace Database.Entities.Common.Statuses
+﻿namespace Database.Entities.Common.Nomenclatures.Statuses
 {
     public class PhoneNumberStatus
     {

@@ -1,6 +1,6 @@
-﻿namespace Database.Entities.Common.Types
+﻿namespace Database.Entities.Common.Nomenclatures.Orders
 {
-    public class InventoryTransactionType
+    public class OrderDetailsStage
     {
         public long Id { get; set; }
         public string Name { get; set; }

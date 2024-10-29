@@ -1,6 +1,6 @@
-﻿namespace Database.Entities.Common.Enums.Types
+﻿namespace Database.Entities.Common.Enums.Products
 {
-    public enum ProductTypes
+    public enum ProductCategories
     {
         FoodAndBeverages = 1,
         HomeAppliances = 2,
@@ -50,5 +50,8 @@
         SmartHomeDevices = 46,
         WearableTech = 47,
         VirtualReality = 48,
+        Bags = 49,
+        Electronics = 50,
+        TV = 51
     }
 }

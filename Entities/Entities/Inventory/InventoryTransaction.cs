@@ -1,4 +1,4 @@
-﻿using Database.Entities.Common.Types;
+﻿using Database.Entities.Common.Nomenclatures.InventoryTransactions;
 using Database.Entities.Products;
 
 namespace Database.Entities.Inventory
@@ -11,6 +11,6 @@ namespace Database.Entities.Inventory
         public InventoryTransactionType Type { get; set; }
         public long ProductId { get; set; }
         public Product Product { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public DateTime Date { get; set; }
     }
 }

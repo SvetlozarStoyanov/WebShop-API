@@ -35,7 +35,6 @@ namespace Database.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AddressLineTwo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
@@ -98,92 +97,7 @@ namespace Database.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Database.Entities.Common.Statuses.AddressStatus", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AddressStatuses");
-                });
-
-            modelBuilder.Entity("Database.Entities.Common.Statuses.DiscountStatus", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DiscountStatuses");
-                });
-
-            modelBuilder.Entity("Database.Entities.Common.Statuses.EmailStatus", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailStatuses");
-                });
-
-            modelBuilder.Entity("Database.Entities.Common.Statuses.OrderStatus", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OrderStatuses");
-                });
-
-            modelBuilder.Entity("Database.Entities.Common.Statuses.PhoneNumberStatus", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PhoneNumberStatuses");
-                });
-
-            modelBuilder.Entity("Database.Entities.Common.Types.InventoryTransactionType", b =>
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.InventoryTransactions.InventoryTransactionType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -200,7 +114,7 @@ namespace Database.Migrations
                     b.ToTable("InventoryTransactionTypes");
                 });
 
-            modelBuilder.Entity("Database.Entities.Common.Types.ProductType", b =>
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Orders.OrderDetailsStage", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -214,7 +128,126 @@ namespace Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductTypes");
+                    b.ToTable("OrderDetailsStages");
+                });
+
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Products.ProductCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductCategories");
+                });
+
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Statuses.AddressStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddressStatuses");
+                });
+
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Statuses.DiscountStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DiscountStatuses");
+                });
+
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Statuses.EmailStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailStatuses");
+                });
+
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Statuses.OrderDetailsStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderDetailsStatuses");
+                });
+
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Statuses.OrderStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStatuses");
+                });
+
+            modelBuilder.Entity("Database.Entities.Common.Nomenclatures.Statuses.PhoneNumberStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PhoneNumberStatuses");
                 });
 
             modelBuilder.Entity("Database.Entities.Customers.Customer", b =>
@@ -250,7 +283,7 @@ namespace Database.Migrations
                     b.Property<int>("DurationInDays")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpiredOn")
+                    b.Property<DateTime?>("ExpiredOn")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Percentage")
@@ -385,6 +418,9 @@ namespace Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
@@ -393,9 +429,6 @@ namespace Database.Migrations
 
                     b.Property<long>("TypeId")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -420,9 +453,6 @@ namespace Database.Migrations
                     b.Property<long>("StatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -433,6 +463,37 @@ namespace Database.Migrations
                 });
 
             modelBuilder.Entity("Database.Entities.Orders.OrderDetails", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("StageId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("OrderDetails");
+                });
+
+            modelBuilder.Entity("Database.Entities.Orders.OrderItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -458,7 +519,7 @@ namespace Database.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Database.Entities.PhoneNumbers.PhoneNumber", b =>
@@ -505,7 +566,6 @@ namespace Database.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Base64Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -527,9 +587,30 @@ namespace Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId");
-
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Database.Entities.Relationships.ProductCategoryProduct", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductTypeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.ToTable("ProductCategoriesProducts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -665,6 +746,21 @@ namespace Database.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProductProductCategory", b =>
+                {
+                    b.Property<long>("CategoriesId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductsId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CategoriesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("ProductProductCategory");
+                });
+
             modelBuilder.Entity("Database.Entities.Addresses.Address", b =>
                 {
                     b.HasOne("Database.Entities.Common.Country", "Country")
@@ -679,7 +775,7 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Entities.Common.Statuses.AddressStatus", "Status")
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Statuses.AddressStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -711,7 +807,7 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Entities.Common.Statuses.DiscountStatus", "Status")
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Statuses.DiscountStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -730,7 +826,7 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Entities.Common.Statuses.EmailStatus", "Status")
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Statuses.EmailStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -744,12 +840,12 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Entities.Inventory.InventoryTransaction", b =>
                 {
                     b.HasOne("Database.Entities.Products.Product", "Product")
-                        .WithMany()
+                        .WithMany("InventoryTransactions")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Entities.Common.Types.InventoryTransactionType", "Type")
+                    b.HasOne("Database.Entities.Common.Nomenclatures.InventoryTransactions.InventoryTransactionType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -768,7 +864,7 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Entities.Common.Statuses.OrderStatus", "Status")
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Statuses.OrderStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -782,7 +878,34 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Entities.Orders.OrderDetails", b =>
                 {
                     b.HasOne("Database.Entities.Orders.Order", "Order")
-                        .WithMany("OrderDetails")
+                        .WithMany("Details")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Orders.OrderDetailsStage", "Stage")
+                        .WithMany()
+                        .HasForeignKey("StageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Statuses.OrderDetailsStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Stage");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Database.Entities.Orders.OrderItem", b =>
+                {
+                    b.HasOne("Database.Entities.Orders.Order", "Order")
+                        .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -812,7 +935,7 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Entities.Common.Statuses.PhoneNumberStatus", "Status")
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Statuses.PhoneNumberStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -825,15 +948,23 @@ namespace Database.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("Database.Entities.Products.Product", b =>
+            modelBuilder.Entity("Database.Entities.Relationships.ProductCategoryProduct", b =>
                 {
-                    b.HasOne("Database.Entities.Common.Types.ProductType", "Type")
+                    b.HasOne("Database.Entities.Products.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("TypeId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Type");
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Products.ProductCategory", "ProductType")
+                        .WithMany()
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ProductType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -887,14 +1018,33 @@ namespace Database.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProductProductCategory", b =>
+                {
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Products.ProductCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Entities.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Database.Entities.Orders.Order", b =>
                 {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("Details");
+
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Database.Entities.Products.Product", b =>
                 {
                     b.Navigation("Discounts");
+
+                    b.Navigation("InventoryTransactions");
                 });
 #pragma warning restore 612, 618
         }

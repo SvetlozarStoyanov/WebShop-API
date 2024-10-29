@@ -1,6 +1,6 @@
-﻿namespace Database.Entities.Common.Types
+﻿namespace Database.Entities.Common.Nomenclatures.Statuses
 {
-    public class ProductType
+    public class EmailStatus
     {
         public long Id { get; set; }
         public string Name { get; set; }

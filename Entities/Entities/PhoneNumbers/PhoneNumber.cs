@@ -1,5 +1,5 @@
 ﻿using Database.Entities.Common;
-using Database.Entities.Common.Statuses;
+using Database.Entities.Common.Nomenclatures.Statuses;
 using Database.Entities.Customers;
 
 namespace Database.Entities.PhoneNumbers

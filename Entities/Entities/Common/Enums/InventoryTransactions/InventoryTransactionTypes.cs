@@ -1,4 +1,4 @@
-﻿namespace Database.Entities.Common.Enums.Types
+﻿namespace Database.Entities.Common.Enums.InventoryTransactions
 {
     public enum InventoryTransactionTypes
     {

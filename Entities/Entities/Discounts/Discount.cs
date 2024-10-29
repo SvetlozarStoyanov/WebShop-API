@@ -1,4 +1,4 @@
-﻿using Database.Entities.Common.Statuses;
+﻿using Database.Entities.Common.Nomenclatures.Statuses;
 using Database.Entities.Products;
 
 namespace Database.Entities.Discounts
@@ -9,7 +9,7 @@ namespace Database.Entities.Discounts
         public decimal Percentage { get; set; }
         public int DurationInDays { get; set; }
         public DateTime CreatedOn { get; set; }
-        public DateTime ExpiredOn { get; set; }
+        public DateTime? ExpiredOn { get; set; }
         public long StatusId { get; set; }
         public DiscountStatus Status { get; set; }
         public long ProductId { get; set; }
