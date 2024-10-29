@@ -4,6 +4,7 @@ using Contracts.Services.Entity.ApplicationUsers;
 using Contracts.Services.Entity.Customers;
 using Contracts.Services.Identity;
 using Contracts.Services.JWT;
+using Contracts.Services.Seeding;
 using DataAccess.UnitOfWork;
 using Models.Configuration;
 using ServiceLayer.Common.Helpers;
@@ -11,6 +12,7 @@ using Services.Entity.ApplicationUsers;
 using Services.Entity.Customers;
 using Services.Identity.UserManager;
 using Services.JWT;
+using Services.Seeding;
 
 namespace WebShop.Extensions
 {
@@ -28,7 +30,14 @@ namespace WebShop.Extensions
 
             AddDataAccess(services);
 
+            AddSeedingServices(services);
+
             AddHelpers(services);
+        }
+
+        private static void AddSeedingServices(IServiceCollection services)
+        {
+            services.AddScoped<ISeedingService, SeedingService>();
         }
 
         private static void AddEntityServices(IServiceCollection services)
