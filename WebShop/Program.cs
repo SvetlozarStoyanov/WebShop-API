@@ -35,7 +35,8 @@ namespace WebShop
                 options.Password.RequiredLength = 5;
                 options.Lockout.AllowedForNewUsers = false;
             })
-                .AddEntityFrameworkStores<WebShopDbContext>();
+            .AddRoles<ApplicationRole>()
+            .AddEntityFrameworkStores<WebShopDbContext>();
 
 
             builder.Services.AddAuthentication(options =>
@@ -95,6 +96,7 @@ namespace WebShop
             app.UseHttpsRedirection();
 
             app.UseMiddleware<ExpiredTokenMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
