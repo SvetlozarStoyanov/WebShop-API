@@ -33,7 +33,12 @@
 
     public class OperationResult<T> : OperationResult where T : class
     {
-        public T Data { get; init; }
+        public T Data { get; set; }
+
+        public OperationResult() : base()
+        {
+
+        }
 
         public OperationResult(T data) : base()
         {

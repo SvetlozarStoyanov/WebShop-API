@@ -5,5 +5,6 @@ namespace Contracts.DataAccess.Repositories.Customers
 {
     public interface ICustomerRepository : IBaseRepository<long, Customer>
     {
+        Task<Customer?> GetCustomerWithPersonalDetailsAsync(string userId);
     }
 }
