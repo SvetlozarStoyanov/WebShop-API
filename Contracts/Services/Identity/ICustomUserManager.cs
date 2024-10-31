@@ -11,5 +11,6 @@ namespace Contracts.Services.Identity
         Task<ApplicationUser> FindByNameAsync(string name);
         Task<ApplicationUser> GetUserAsync(ClaimsPrincipal claimsPrincipal);
         Task<IdentityResult> CreateAsync(ApplicationUser user, string password);
+        Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName);
     }
 }

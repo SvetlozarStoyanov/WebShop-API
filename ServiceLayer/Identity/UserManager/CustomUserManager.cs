@@ -12,7 +12,6 @@ namespace Services.Identity.UserManager
         public CustomUserManager(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
-
         }
 
         public async Task<ApplicationUser> FindByIdAsync(string id)
@@ -39,6 +38,11 @@ namespace Services.Identity.UserManager
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
         {
            return await userManager.CreateAsync(user, password);
+        }
+
+        public async Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName) 
+        {
+            return await userManager.AddToRoleAsync(user, roleName);
         }
     }
 }
