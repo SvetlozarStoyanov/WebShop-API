@@ -37,7 +37,7 @@ namespace Database
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<InventoryTransactionType> InventoryTransactionTypes { get; set; }
         #endregion
-
+        public DbSet<ApplicationRole> Roles { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Email> Emails { get; set; }
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }

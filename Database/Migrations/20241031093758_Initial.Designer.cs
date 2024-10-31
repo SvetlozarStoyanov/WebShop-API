@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(WebShopDbContext))]
-    [Migration("20241029155724_Initial")]
+    [Migration("20241031093758_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -625,6 +625,11 @@ namespace Database.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -641,6 +646,10 @@ namespace Database.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasDiscriminator().HasValue("IdentityRole");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -764,6 +773,17 @@ namespace Database.Migrations
                     b.ToTable("ProductProductCategory");
                 });
 
+            modelBuilder.Entity("Database.Entities.Identity.ApplicationRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("ApplicationRole");
+                });
+
             modelBuilder.Entity("Database.Entities.Addresses.Address", b =>
                 {
                     b.HasOne("Database.Entities.Common.Country", "Country")
@@ -773,7 +793,7 @@ namespace Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Database.Entities.Customers.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Addresses")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -824,7 +844,7 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Entities.Emails.Email", b =>
                 {
                     b.HasOne("Database.Entities.Customers.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Emails")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -933,7 +953,7 @@ namespace Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Database.Entities.Customers.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("PhoneNumbers")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1034,6 +1054,15 @@ namespace Database.Migrations
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Database.Entities.Customers.Customer", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Emails");
+
+                    b.Navigation("PhoneNumbers");
                 });
 
             modelBuilder.Entity("Database.Entities.Orders.Order", b =>
