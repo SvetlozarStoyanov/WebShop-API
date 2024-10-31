@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Models.Dto.Customers;
+using System.ComponentModel.DataAnnotations;
 
-namespace Models.Dto.UserDtos
+namespace Models.Dto.User
 {
     public class UserRegisterDto
     {
@@ -13,5 +14,6 @@ namespace Models.Dto.UserDtos
         public string LastName { get; set; }
         [Required]
         public string Password { get; set; }
+        public CustomerRegisterDto Customer { get; set; }
     }
 }

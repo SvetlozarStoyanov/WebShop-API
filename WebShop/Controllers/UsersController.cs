@@ -6,7 +6,7 @@ using Database.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Models.Dto.UserDtos;
+using Models.Dto.User;
 using WebShop.Extensions;
 
 namespace WebShop.Controllers
@@ -36,7 +36,7 @@ namespace WebShop.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(UserLoginDto dto)
+        public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {
             var userId = User.GetId();
 
@@ -45,9 +45,9 @@ namespace WebShop.Controllers
                 return BadRequest("Already logged in!");
             }
 
-            var user = await customUserManager.FindByNameAsync(dto.UserName);
+            var user = await customUserManager.FindByNameAsync(userLoginDto.UserName);
 
-            if (user == null || !(await customUserManager.CheckPasswordAsync(user, dto.Password)))
+            if (user == null || !(await customUserManager.CheckPasswordAsync(user, userLoginDto.Password)))
             {
                 return BadRequest("Incorrect username or password!");
             }
@@ -59,38 +59,46 @@ namespace WebShop.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register(UserRegisterDto dto)
+        public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
         {
             var user = new ApplicationUser()
             {
-                FirstName = dto.FirstName,
-                MiddleName = dto.MiddleName,
-                LastName = dto.LastName,
-                UserName = dto.UserName,
+                FirstName = userRegisterDto.FirstName,
+                MiddleName = userRegisterDto.MiddleName,
+                LastName = userRegisterDto.LastName,
+                UserName = userRegisterDto.UserName,
             };
 
-            var userNameIsTaken = await userService.IsUserNameTakenAsync(dto.UserName);
+            var userNameIsTaken = await userService.IsUserNameTakenAsync(userRegisterDto.UserName);
 
             if (userNameIsTaken)
             {
-                return BadRequest($"Username - {dto.UserName} is already taken!");
+                return BadRequest($"Username - {userRegisterDto.UserName} is already taken!");
             }
 
-            var operationResult = await customerService.CreateCustomerAsync(user);
+            var operationResult = await customerService.CreateCustomerAsync(user, userRegisterDto.Customer);
 
             if (!operationResult.IsSuccessful)
             {
                 return this.Error(operationResult);
             }
 
-            var result = await customUserManager.CreateAsync(user, dto.Password);
-            if (result.Succeeded)
+            var createUserResult = await customUserManager.CreateAsync(user, userRegisterDto.Password);
+
+            if (!createUserResult.Succeeded)
             {
-                var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
-                return Ok(token);
+                return BadRequest(createUserResult.Errors.Select(e => e.Description));
             }
 
-            return BadRequest();
+            var addUserToRoleResult = await customUserManager.AddToRoleAsync(user, "Customer");
+
+            if (!addUserToRoleResult.Succeeded)
+            {
+                return BadRequest(addUserToRoleResult.Errors.Select(e => e.Description));
+            }
+
+            var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
+            return Ok(token);
         }
 
         [Authorize]
@@ -99,6 +107,6 @@ namespace WebShop.Controllers
         public IActionResult AuthTest()
         {
             return Ok("You are authenticated!");
-        }
+        }        
     }
 }
