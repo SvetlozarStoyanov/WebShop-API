@@ -5,6 +5,7 @@ using Contracts.Services.Entity.ApplicationUsers;
 using Contracts.Services.Entity.Customers;
 using Contracts.Services.Entity.Emails;
 using Contracts.Services.Entity.PhoneNumbers;
+using Contracts.Services.Entity.Products;
 using Contracts.Services.Identity;
 using Contracts.Services.JWT;
 using Contracts.Services.Managers.Customers;
@@ -17,6 +18,7 @@ using Services.Entity.ApplicationUsers;
 using Services.Entity.Customers;
 using Services.Entity.Emails;
 using Services.Entity.PhoneNumbers;
+using Services.Entity.Products;
 using Services.Identity.UserManager;
 using Services.JWT;
 using Services.Managers.Customers;
@@ -67,6 +69,8 @@ namespace WebShop.Extensions
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IPhoneNumberService, PhoneNumberService>();
             services.AddScoped<IEmailService, EmailService>();
+
+            services.AddScoped<IProductService, ProductService>();
         }
         private static void AddManagerServices(IServiceCollection services)
         {
