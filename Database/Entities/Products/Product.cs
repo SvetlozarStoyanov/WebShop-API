@@ -19,7 +19,6 @@ namespace Database.Entities.Products
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
         public string? Base64Image { get; set; }
-        public long TypeId { get; set; }
         public ICollection<ProductCategory> Categories { get; set; }
         public ICollection<Discount> Discounts { get; set; }
         public ICollection<InventoryTransaction> InventoryTransactions { get; set; }

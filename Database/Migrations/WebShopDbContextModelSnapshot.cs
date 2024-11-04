@@ -582,9 +582,6 @@ namespace Database.Migrations
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("int");
 
-                    b.Property<long>("TypeId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -598,17 +595,17 @@ namespace Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("ProductId")
+                    b.Property<long>("ProductCategoryId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ProductTypeId")
+                    b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductCategoryId");
 
-                    b.HasIndex("ProductTypeId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductCategoriesProducts");
                 });
@@ -753,21 +750,6 @@ namespace Database.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("ProductProductCategory", b =>
-                {
-                    b.Property<long>("CategoriesId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProductsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CategoriesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("ProductProductCategory");
                 });
 
             modelBuilder.Entity("Database.Entities.Identity.ApplicationRole", b =>
@@ -970,21 +952,21 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Entities.Relationships.ProductCategoryProduct", b =>
                 {
+                    b.HasOne("Database.Entities.Common.Nomenclatures.Products.ProductCategory", "ProductCategory")
+                        .WithMany()
+                        .HasForeignKey("ProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Database.Entities.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Entities.Common.Nomenclatures.Products.ProductCategory", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Product");
 
-                    b.Navigation("ProductType");
+                    b.Navigation("ProductCategory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1034,21 +1016,6 @@ namespace Database.Migrations
                     b.HasOne("Database.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductProductCategory", b =>
-                {
-                    b.HasOne("Database.Entities.Common.Nomenclatures.Products.ProductCategory", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Database.Entities.Products.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

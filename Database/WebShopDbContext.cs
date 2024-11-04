@@ -52,5 +52,20 @@ namespace Database
         #region Many-To-Many 
         public DbSet<ProductCategoryProduct> ProductCategoriesProducts { get; set; }
         #endregion
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Product>()
+                .HasMany(x => x.Categories)
+                .WithMany(x => x.Products)
+                .UsingEntity<ProductCategoryProduct>();
+
+            builder.Entity<ProductCategory>()
+                .HasMany(x => x.Products)
+                .WithMany(x => x.Categories)
+                .UsingEntity<ProductCategoryProduct>();
+
+            base.OnModelCreating(builder);
+        }
     }
 }

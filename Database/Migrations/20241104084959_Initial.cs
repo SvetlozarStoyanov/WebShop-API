@@ -198,8 +198,7 @@ namespace Database.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuantityInStock = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Base64Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TypeId = table.Column<long>(type: "bigint", nullable: false)
+                    Base64Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -395,45 +394,21 @@ namespace Database.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductTypeId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductCategoryId = table.Column<long>(type: "bigint", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategoriesProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductCategoriesProducts_ProductCategories_ProductTypeId",
-                        column: x => x.ProductTypeId,
+                        name: "FK_ProductCategoriesProducts_ProductCategories_ProductCategoryId",
+                        column: x => x.ProductCategoryId,
                         principalTable: "ProductCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductCategoriesProducts_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductProductCategory",
-                columns: table => new
-                {
-                    CategoriesId = table.Column<long>(type: "bigint", nullable: false),
-                    ProductsId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductProductCategory", x => new { x.CategoriesId, x.ProductsId });
-                    table.ForeignKey(
-                        name: "FK_ProductProductCategory_ProductCategories_CategoriesId",
-                        column: x => x.CategoriesId,
-                        principalTable: "ProductCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductProductCategory_Products_ProductsId",
-                        column: x => x.ProductsId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -768,19 +743,14 @@ namespace Database.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductCategoriesProducts_ProductCategoryId",
+                table: "ProductCategoriesProducts",
+                column: "ProductCategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductCategoriesProducts_ProductId",
                 table: "ProductCategoriesProducts",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductCategoriesProducts_ProductTypeId",
-                table: "ProductCategoriesProducts",
-                column: "ProductTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductProductCategory_ProductsId",
-                table: "ProductProductCategory",
-                column: "ProductsId");
         }
 
         /// <inheritdoc />
@@ -824,9 +794,6 @@ namespace Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductCategoriesProducts");
-
-            migrationBuilder.DropTable(
-                name: "ProductProductCategory");
 
             migrationBuilder.DropTable(
                 name: "AddressStatuses");
