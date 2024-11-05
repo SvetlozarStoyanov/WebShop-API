@@ -4,11 +4,14 @@ using Contracts.Services.Entity.Addresses;
 using Contracts.Services.Entity.ApplicationUsers;
 using Contracts.Services.Entity.Customers;
 using Contracts.Services.Entity.Emails;
+using Contracts.Services.Entity.InventoryTransactions;
+using Contracts.Services.Entity.Orders;
 using Contracts.Services.Entity.PhoneNumbers;
 using Contracts.Services.Entity.Products;
 using Contracts.Services.Identity;
 using Contracts.Services.JWT;
 using Contracts.Services.Managers.Customers;
+using Contracts.Services.Managers.Orders;
 using Contracts.Services.Seeding;
 using DataAccess.UnitOfWork;
 using Models.Configuration;
@@ -17,11 +20,14 @@ using Services.Entity.Addresses;
 using Services.Entity.ApplicationUsers;
 using Services.Entity.Customers;
 using Services.Entity.Emails;
+using Services.Entity.InventoryTransactions;
+using Services.Entity.Orders;
 using Services.Entity.PhoneNumbers;
 using Services.Entity.Products;
 using Services.Identity.UserManager;
 using Services.JWT;
 using Services.Managers.Customers;
+using Services.Managers.Orders;
 using Services.Seeding;
 using WebShop.Middleware;
 
@@ -71,10 +77,13 @@ namespace WebShop.Extensions
             services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IInventoryTransactionService, InventoryTransactionService>();
         }
         private static void AddManagerServices(IServiceCollection services)
         {
             services.AddScoped<ICustomerManager, CustomerManager>();
+            services.AddScoped<IOrderManager, OrderManager>();
         }
 
         private static void AddJwtServices(IServiceCollection services)
