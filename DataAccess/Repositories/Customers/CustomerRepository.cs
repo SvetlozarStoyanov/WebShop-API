@@ -13,6 +13,13 @@ namespace DataAccess.Repositories.Customers
         {
         }
 
+        public async Task<Customer?> GetCustomerWithOrdersAsync(string userId)
+        {
+            return await FindByCondition(x => x.UserId == userId)
+                .Include(x => x.Orders)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Customer?> GetCustomerWithPersonalDetailsAsync(string userId)
         {
             return await FindByCondition(x => x.UserId == userId)
