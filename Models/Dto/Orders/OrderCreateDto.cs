@@ -2,7 +2,7 @@
 {
     public class OrderCreateDto
     {
-        public IEnumerable<OrderDetailsCreateDto> Products { get; set; }
+        public IEnumerable<OrderItemCreateDto> Products { get; set; }
         
     }
 }
