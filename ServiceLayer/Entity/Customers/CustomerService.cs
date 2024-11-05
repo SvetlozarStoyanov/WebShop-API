@@ -7,6 +7,7 @@ using Database.Entities.Customers;
 using Database.Entities.Emails;
 using Database.Entities.Identity;
 using Database.Entities.PhoneNumbers;
+using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
 using Models.Dto.Addresses;
@@ -65,11 +66,27 @@ namespace Services.Entity.Customers
                 Emails = createEmailsOperationResult.Data
             };
 
-
             await unitOfWork.CustomerRepository.AddAsync(customer);
 
+            // Commented because save changes is called elsewhere in the logic this method is used in
             //await unitOfWork.SaveChangesAsync();
 
+            return operationResult;
+        }
+
+        public async Task<OperationResult<Customer>> GetCustomerWithOrdersAsync(string userId)
+        {
+            var operationResult = new OperationResult<Customer>();
+
+            var customer = await unitOfWork.CustomerRepository.GetCustomerWithOrdersAsync(userId);
+
+            if (customer is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Customer)} with userId: {userId} was not found!"));
+                return operationResult;
+            }
+
+            operationResult.Data = customer;
             return operationResult;
         }
 
@@ -81,6 +98,7 @@ namespace Services.Entity.Customers
             if (customer is null)
             {
                 operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Customer)} with user id - {userId} was not found!"));
+                return operationResult;
             }
 
             operationResult.Data = customer;

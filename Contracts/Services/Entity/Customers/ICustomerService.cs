@@ -9,6 +9,9 @@ namespace Contracts.Services.Entity.Customers
     {
         Task<OperationResult> CreateCustomerAsync(ApplicationUser user, CustomerRegisterDto customerRegisterDto);
 
+        Task<OperationResult<Customer>> GetCustomerWithOrdersAsync(string userId);
+
         Task<OperationResult<Customer>> GetCustomerWithPersonalDetailsAsync(string userId);
+
     }
 }
