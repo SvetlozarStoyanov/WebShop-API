@@ -5,6 +5,7 @@ using Database.Entities.Common.Nomenclatures.InventoryTransactions;
 using Database.Entities.Inventory;
 using Database.Entities.Orders;
 using Models.Common;
+using System.Data;
 
 namespace Services.Entity.InventoryTransactions
 {
@@ -15,6 +16,34 @@ namespace Services.Entity.InventoryTransactions
         public InventoryTransactionService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+        }
+
+        public async Task<OperationResult> CreateInventoryTransactionsFromCancelledOrderAsync(Order order)
+        {
+            var operationResult = new OperationResult();
+
+            var returnedType = await unitOfWork.InventoryTransactionTypeRepository.GetByIdAsync((long)InventoryTransactionTypes.Returned);
+
+            if (returnedType is null)
+            {
+                throw new InvalidOperationException($"{nameof(InventoryTransactionType)} of type: {InventoryTransactionTypes.Returned} does not exist!");
+            }
+
+            foreach (var orderItem in order.Items)
+            {
+                var inventoryTransaction = new InventoryTransaction
+                {
+                    Type = returnedType,
+                    Quantity = orderItem.Quantity,
+                    Date = DateTime.UtcNow,
+                };
+
+                orderItem.Product.QuantityInStock += orderItem.Quantity;
+
+                orderItem.Product.InventoryTransactions.Add(inventoryTransaction);
+            }
+
+            return operationResult;
         }
 
         public async Task<OperationResult> CreateInventoryTransactionsFromOrderAsync(Order order)

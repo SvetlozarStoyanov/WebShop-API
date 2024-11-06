@@ -6,5 +6,7 @@ namespace Contracts.Services.Entity.InventoryTransactions
     public interface IInventoryTransactionService
     {
         Task<OperationResult> CreateInventoryTransactionsFromOrderAsync(Order order);
+
+        Task<OperationResult> CreateInventoryTransactionsFromCancelledOrderAsync(Order order);
     }
 }
