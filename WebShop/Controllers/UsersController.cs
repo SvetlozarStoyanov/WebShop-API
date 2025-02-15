@@ -6,12 +6,14 @@ using Database.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Models.Dto.User;
+using Models.Dto.Users.Input;
+using Models.Dto.Users.Output;
 using WebShop.Extensions;
 
 namespace WebShop.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
@@ -34,6 +36,7 @@ namespace WebShop.Controllers
             this.userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto)
@@ -54,9 +57,36 @@ namespace WebShop.Controllers
 
             var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
 
-            return Ok(token);
+            Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Ensure this is only true in HTTPS environments
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(14)
+            });
+
+            var userLoginOutputDto = new UserLoginOutputDto()
+            {
+                Id = user.Id,
+                UserName = user.UserName
+            };
+
+            return Ok(userLoginOutputDto);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            if (Request.Cookies["jwt"] != null)
+            {
+                Response.Cookies.Delete("jwt");
+            }
+            return Ok();
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
@@ -98,10 +128,24 @@ namespace WebShop.Controllers
             }
 
             var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
-            return Ok(token);
+
+            Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Ensure this is only true in HTTPS environments
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(14)
+            });
+
+            var userLoginOutputDto = new UserLoginOutputDto()
+            {
+                Id = user.Id,
+                UserName = user.UserName
+            };
+
+            return Ok(userLoginOutputDto);
         }
 
-        [Authorize]
         [HttpGet]
         [Route("auth-test")]
         public IActionResult AuthTest()
