@@ -1,5 +1,5 @@
 ﻿using Models.Common;
-using Models.Dto.Orders;
+using Models.Dto.Orders.Input;
 
 namespace Contracts.Services.Managers.Orders
 {

@@ -1,4 +1,4 @@
-﻿namespace Models.Dto.Orders
+﻿namespace Models.Dto.Orders.Input
 {
     public class OrderCreateDto
     {

@@ -1,6 +1,6 @@
 ﻿using Database.Entities.PhoneNumbers;
 using Models.Common;
-using Models.Dto.PhoneNumbers;
+using Models.Dto.PhoneNumbers.Input;
 
 namespace Contracts.Services.Entity.PhoneNumbers
 {

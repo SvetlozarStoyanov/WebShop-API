@@ -1,4 +1,4 @@
-﻿namespace Models.Dto.PhoneNumbers
+﻿namespace Models.Dto.PhoneNumbers.Input
 {
     public class UpdatePhoneNumbersDto
     {

@@ -1,4 +1,4 @@
-﻿namespace Models.Dto.Emails
+﻿namespace Models.Dto.Emails.Input
 {
     public class UpdateEmailsDto
     {

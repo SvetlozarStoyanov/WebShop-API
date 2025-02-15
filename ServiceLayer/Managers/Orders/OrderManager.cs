@@ -7,7 +7,7 @@ using Database.Entities.Customers;
 using Database.Entities.Orders;
 using Models.Common;
 using Models.Common.Enums;
-using Models.Dto.Orders;
+using Models.Dto.Orders.Input;
 
 namespace Services.Managers.Orders
 {

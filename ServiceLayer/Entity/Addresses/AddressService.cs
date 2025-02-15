@@ -5,7 +5,7 @@ using Database.Entities.Common.Enums.Statuses;
 using Database.Entities.Common.Nomenclatures.Statuses;
 using Models.Common;
 using Models.Common.Enums;
-using Models.Dto.Addresses;
+using Models.Dto.Addresses.Input;
 
 namespace Services.Entity.Addresses
 {

@@ -7,7 +7,7 @@ using Database.Entities.Emails;
 using Models.Common;
 using Models.Common.Enums;
 using Models.Dto.Addresses;
-using Models.Dto.Emails;
+using Models.Dto.Emails.Input;
 
 namespace Services.Entity.Emails
 {

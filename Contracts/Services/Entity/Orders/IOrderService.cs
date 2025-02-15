@@ -1,6 +1,6 @@
 ﻿using Database.Entities.Orders;
 using Models.Common;
-using Models.Dto.Orders;
+using Models.Dto.Orders.Input;
 
 namespace Contracts.Services.Entity.Orders
 {

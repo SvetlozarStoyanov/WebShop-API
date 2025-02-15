@@ -2,7 +2,8 @@
 using Contracts.Services.Entity.Products;
 using Database.Entities.Products;
 using Microsoft.EntityFrameworkCore;
-using Models.Dto.Products;
+using Models.Dto.Products.Input;
+using Models.Dto.Products.Output;
 using Models.Enums.QueryDto;
 
 namespace Services.Entity.Products

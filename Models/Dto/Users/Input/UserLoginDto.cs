@@ -1,4 +1,4 @@
-﻿namespace Models.Dto.User
+﻿namespace Models.Dto.Users.Input
 {
     public class UserLoginDto
     {

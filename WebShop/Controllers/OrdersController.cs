@@ -1,7 +1,7 @@
 ﻿using Contracts.Services.Managers.Orders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.Dto.Orders;
+using Models.Dto.Orders.Input;
 using WebShop.Extensions;
 
 namespace WebShop.Controllers

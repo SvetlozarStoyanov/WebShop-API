@@ -1,4 +1,4 @@
-﻿namespace Models.Dto.Products
+﻿namespace Models.Dto.Products.Output
 {
     public class ProductListDto
     {

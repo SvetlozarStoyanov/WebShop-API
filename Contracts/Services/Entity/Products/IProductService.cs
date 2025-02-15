@@ -1,4 +1,5 @@
-﻿using Models.Dto.Products;
+﻿using Models.Dto.Products.Input;
+using Models.Dto.Products.Output;
 
 namespace Contracts.Services.Entity.Products
 {

@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models.Dto.Emails
+namespace Models.Dto.Emails.Input
 {
-    public class EmailCreateDto
+    public class EmailEditDto
     {
+        public long Id { get; set; }
         [Required]
         public string Address { get; set; }
         public bool IsMain { get; set; }

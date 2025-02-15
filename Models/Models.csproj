@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Dto\Addresses\Output\" />
+    <Folder Include="Dto\Emails\Output\" />
+    <Folder Include="Dto\Orders\Output\" />
+    <Folder Include="Dto\PhoneNumbers\Output\" />
+  </ItemGroup>
+
 </Project>

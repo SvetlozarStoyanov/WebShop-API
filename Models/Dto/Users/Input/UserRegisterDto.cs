@@ -1,7 +1,7 @@
 ﻿using Models.Dto.Customers;
 using System.ComponentModel.DataAnnotations;
 
-namespace Models.Dto.User
+namespace Models.Dto.Users.Input
 {
     public class UserRegisterDto
     {

@@ -1,6 +1,6 @@
 ﻿using Contracts.Services.Entity.Products;
 using Microsoft.AspNetCore.Mvc;
-using Models.Dto.Products;
+using Models.Dto.Products.Input;
 
 namespace WebShop.Controllers
 {

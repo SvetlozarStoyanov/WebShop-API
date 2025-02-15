@@ -1,4 +1,4 @@
-﻿namespace Models.Dto.Addresses
+﻿namespace Models.Dto.Addresses.Input
 {
     public class UpdateAddressesDto
     {

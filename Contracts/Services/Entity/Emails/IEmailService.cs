@@ -1,6 +1,6 @@
 ﻿using Database.Entities.Emails;
 using Models.Common;
-using Models.Dto.Emails;
+using Models.Dto.Emails.Input;
 
 namespace Contracts.Services.Entity.Emails
 {

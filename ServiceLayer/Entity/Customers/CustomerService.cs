@@ -10,10 +10,10 @@ using Database.Entities.PhoneNumbers;
 using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
-using Models.Dto.Addresses;
+using Models.Dto.Addresses.Input;
 using Models.Dto.Customers;
-using Models.Dto.Emails;
-using Models.Dto.PhoneNumbers;
+using Models.Dto.Emails.Input;
+using Models.Dto.PhoneNumbers.Input;
 
 namespace Services.Entity.Customers
 {

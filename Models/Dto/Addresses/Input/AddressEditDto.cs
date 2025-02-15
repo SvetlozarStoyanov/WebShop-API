@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models.Dto.Addresses
+namespace Models.Dto.Addresses.Input
 {
     public class AddressEditDto
     {
