@@ -18,16 +18,6 @@ namespace WebShop.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("phone-codes-ddm")]
-        public async Task<IActionResult> GetPhoneCodesForDDM()
-        {
-            var countries = await countryService.GetCountriesAndPhoneCodesDropdownAsync();
-
-            return Ok(countries);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
         [Route("all-ddm")]
         public async Task<IActionResult> GetAllForDDM()
         {

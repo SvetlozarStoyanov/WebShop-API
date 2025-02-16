@@ -14,26 +14,14 @@ namespace Services.Entity.Countries
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<CountryPhoneCodeDDMDto>> GetCountriesAndPhoneCodesDropdownAsync()
-        {
-            var countries = await unitOfWork.CountryRepository.AllAsNoTracking()
-                .Select(x => new CountryPhoneCodeDDMDto()
-                {
-                    Id = x.Id,
-                    NameAndPhoneCode = $"{x.Name} ({x.PhoneCode})"
-                })
-                .ToListAsync();
-
-            return countries;
-        }
-
         public async Task<IEnumerable<CountryDDMDto>> GetCountriesDropdownAsync()
         {
             var countries = await unitOfWork.CountryRepository.AllAsNoTracking()
                 .Select(x => new CountryDDMDto()
                 {
                     Id = x.Id,
-                    Name = $"{x.Name}"
+                    Name = $"{x.Name}",
+                    PhoneCode = x.PhoneCode
                 })
                 .ToListAsync();
 
