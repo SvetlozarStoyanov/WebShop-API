@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Dto\Addresses\Output\" />
+    <Folder Include="Dto\Countries\Input\" />
     <Folder Include="Dto\Emails\Output\" />
     <Folder Include="Dto\Orders\Output\" />
     <Folder Include="Dto\PhoneNumbers\Output\" />

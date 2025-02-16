@@ -2,6 +2,7 @@
 using Contracts.Services.Common.Helpers;
 using Contracts.Services.Entity.Addresses;
 using Contracts.Services.Entity.ApplicationUsers;
+using Contracts.Services.Entity.Countries;
 using Contracts.Services.Entity.Customers;
 using Contracts.Services.Entity.Emails;
 using Contracts.Services.Entity.InventoryTransactions;
@@ -18,6 +19,7 @@ using Models.Configuration;
 using ServiceLayer.Common.Helpers;
 using Services.Entity.Addresses;
 using Services.Entity.ApplicationUsers;
+using Services.Entity.Countries;
 using Services.Entity.Customers;
 using Services.Entity.Emails;
 using Services.Entity.InventoryTransactions;
@@ -75,6 +77,8 @@ namespace WebShop.Extensions
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IPhoneNumberService, PhoneNumberService>();
             services.AddScoped<IEmailService, EmailService>();
+
+            services.AddScoped<ICountryService, CountryService>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
