@@ -18,5 +18,14 @@ namespace Services.Entity.ApplicationUsers
         {
             return await unitOfWork.UserRepository.AllAsNoTracking().AnyAsync(u => u.NormalizedUserName == userName.ToUpper());
         }
+
+        public async Task<IEnumerable<string>> GetAllUserNamesAsync()
+        {
+            var usernames = await unitOfWork.UserRepository.AllAsNoTracking()
+                .Select(x => x.UserName)
+                .ToListAsync();
+
+            return usernames;
+        }
     }
 }
