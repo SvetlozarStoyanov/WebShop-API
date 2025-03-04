@@ -125,10 +125,10 @@ namespace WebShop
 
             app.UseMiddleware<ExpiredTokenMiddleware>();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseCors(corsName);
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors(corsName);
 
             app.MapControllers();
 
