@@ -13,6 +13,7 @@ using Contracts.Services.Identity;
 using Contracts.Services.JWT;
 using Contracts.Services.Managers.Customers;
 using Contracts.Services.Managers.Orders;
+using Contracts.Services.ProfilePictures;
 using Contracts.Services.Seeding;
 using DataAccess.UnitOfWork;
 using Models.Configuration;
@@ -30,6 +31,7 @@ using Services.Identity.UserManager;
 using Services.JWT;
 using Services.Managers.Customers;
 using Services.Managers.Orders;
+using Services.ProfilePictures;
 using Services.Seeding;
 using WebShop.Middleware;
 
@@ -83,7 +85,10 @@ namespace WebShop.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IInventoryTransactionService, InventoryTransactionService>();
+
+            services.AddScoped<IProfilePictureService, ProfilePictureService>();
         }
+
         private static void AddManagerServices(IServiceCollection services)
         {
             services.AddScoped<ICustomerManager, CustomerManager>();

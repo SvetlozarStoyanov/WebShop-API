@@ -128,7 +128,8 @@ namespace WebShop.Controllers
             var userLoginOutputDto = new UserLoginOutputDto()
             {
                 Id = user.Id,
-                UserName = user.UserName
+                UserName = user.UserName,
+                ProfilePicture = user.ProfilePicture
             };
 
             return Ok(userLoginOutputDto);

@@ -1,5 +1,4 @@
-﻿using Database.Entities.Customers;
-using Models.Common;
+﻿using Models.Common;
 using Models.Dto.Customers;
 
 namespace Contracts.Services.Managers.Customers
