@@ -387,6 +387,9 @@ namespace Database.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -861,7 +864,7 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Entities.Orders.Order", b =>
                 {
                     b.HasOne("Database.Entities.Customers.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1025,6 +1028,8 @@ namespace Database.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("Emails");
+
+                    b.Navigation("Orders");
 
                     b.Navigation("PhoneNumbers");
                 });
