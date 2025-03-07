@@ -5,7 +5,9 @@ using Contracts.Services.Entity.Emails;
 using Contracts.Services.Entity.PhoneNumbers;
 using Contracts.Services.Managers.Customers;
 using Models.Common;
-using Models.Dto.Customers;
+using Models.Dto.Addresses.Input;
+using Models.Dto.Emails.Input;
+using Models.Dto.PhoneNumbers.Input;
 
 namespace Services.Managers.Customers
 {
@@ -30,11 +32,11 @@ namespace Services.Managers.Customers
             this.emailService = emailService;
         }
 
-        public async Task<OperationResult> UpdateCustomerAsync(string userId, CustomerEditDto customerEditDto)
+        public async Task<OperationResult> UpdateCustomerAddressesAsync(string userId, IEnumerable<AddressEditDto> AddressEditDtos)
         {
             var operationResult = new OperationResult();
 
-            var getCustomerOperationResult = await customerService.GetCustomerWithPersonalDetailsAsync(userId);
+            var getCustomerOperationResult = await customerService.GetCustomerWithAddressesAsync(userId);
 
             if (!getCustomerOperationResult.IsSuccessful)
             {
@@ -44,34 +46,59 @@ namespace Services.Managers.Customers
 
             var customer = getCustomerOperationResult.Data;
 
-            if (customerEditDto.UpdatedAddresses != null)
+            operationResult.AppendErrors(await addressService.UpdateCustomerAddressesAsync(customer.Addresses, AddressEditDtos));
+            if (!operationResult.IsSuccessful)
             {
-                operationResult.AppendErrors(await addressService.UpdateCustomerAddressesAsync(customer.Addresses, customerEditDto.UpdatedAddresses));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
-
-            if (customerEditDto.UpdatedPhoneNumbers != null)
-            {
-                operationResult.AppendErrors(await phoneNumberService.UpdateCustomerPhoneNumbersAsync(customer.PhoneNumbers, customerEditDto.UpdatedPhoneNumbers));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
-
-            if (customerEditDto.UpdatedEmails != null)
-            {
-                operationResult.AppendErrors(await emailService.UpdateCustomerEmailsAsync(customer.Emails, customerEditDto.UpdatedEmails));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
+                return operationResult;
             }
 
             await unitOfWork.SaveChangesAsync();
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult> UpdateCustomerPhoneNumbersAsync(string userId, UpdatePhoneNumbersDto updatePhoneNumbersDto)
+        {
+            var operationResult = new OperationResult();
+
+            var getCustomerOperationResult = await customerService.GetCustomerWithPhoneNumbersAsync(userId);
+
+            if (!getCustomerOperationResult.IsSuccessful)
+            {
+                operationResult.AppendErrors(getCustomerOperationResult);
+                return operationResult;
+            }
+
+            var customer = getCustomerOperationResult.Data;
+
+            operationResult.AppendErrors(await phoneNumberService.UpdateCustomerPhoneNumbersAsync(customer.PhoneNumbers, updatePhoneNumbersDto));
+            if (!operationResult.IsSuccessful)
+            {
+                return operationResult;
+            }
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult> UpdateCustomerEmailsAsync(string userId, UpdateEmailsDto updateEmailsDto)
+        {
+            var operationResult = new OperationResult();
+            var getCustomerOperationResult = await customerService.GetCustomerWithEmailsAsync(userId);
+
+            if (!getCustomerOperationResult.IsSuccessful)
+            {
+                operationResult.AppendErrors(getCustomerOperationResult);
+                return operationResult;
+            }
+
+            var customer = getCustomerOperationResult.Data;
+
+            operationResult.AppendErrors(await emailService.UpdateCustomerEmailsAsync(customer.Emails, updateEmailsDto));
+            if (!operationResult.IsSuccessful)
+            {
+                return operationResult;
+            }
+
 
             return operationResult;
         }

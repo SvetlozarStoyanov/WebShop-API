@@ -2,7 +2,7 @@
 using Models.Dto.Emails.Input;
 using Models.Dto.PhoneNumbers.Input;
 
-namespace Models.Dto.Customers
+namespace Models.Dto.Customers.Input
 {
     public class CustomerRegisterDto
     {

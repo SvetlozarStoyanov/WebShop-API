@@ -20,6 +20,29 @@ namespace DataAccess.Repositories.Customers
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Customer?> GetCustomerWithAddressesAsync(string userId)
+        {
+            return await FindByCondition(x => x.UserId == userId)
+            .Include(x => x.Addresses.Where(y => y.StatusId == (long)AddressStatuses.Active))
+            .ThenInclude(x => x.Country)
+            .FirstOrDefaultAsync();
+        }
+
+        public async Task<Customer?> GetCustomerWithPhoneNumbersAsync(string userId)
+        {
+            return await FindByCondition(x => x.UserId == userId)
+                .Include(x => x.PhoneNumbers.Where(y => y.StatusId == (long)PhoneNumberStatuses.Active))
+                .ThenInclude(x => x.Country)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Customer?> GetCustomerWithEmailsAsync(string userId)
+        {
+            return await FindByCondition(x => x.UserId == userId)
+                .Include(x => x.Emails.Where(y => y.StatusId == (long)EmailStatuses.Active))
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Customer?> GetCustomerWithPersonalDetailsAsync(string userId)
         {
             return await FindByCondition(x => x.UserId == userId)
@@ -30,5 +53,7 @@ namespace DataAccess.Repositories.Customers
                 .ThenInclude(x => x.Country)
                 .FirstOrDefaultAsync();
         }
+
+
     }
 }

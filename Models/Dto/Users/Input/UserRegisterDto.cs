@@ -1,4 +1,4 @@
-﻿using Models.Dto.Customers;
+﻿using Models.Dto.Customers.Input;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models.Dto.Users.Input

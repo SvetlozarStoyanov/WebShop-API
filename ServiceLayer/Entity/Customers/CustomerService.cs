@@ -8,10 +8,11 @@ using Database.Entities.Emails;
 using Database.Entities.Identity;
 using Database.Entities.PhoneNumbers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Models.Common;
 using Models.Common.Enums;
 using Models.Dto.Addresses.Input;
-using Models.Dto.Customers;
+using Models.Dto.Customers.Input;
 using Models.Dto.Emails.Input;
 using Models.Dto.PhoneNumbers.Input;
 
@@ -87,6 +88,51 @@ namespace Services.Entity.Customers
             }
 
             operationResult.Data = customer;
+            return operationResult;
+        }
+
+        public async Task<OperationResult<Customer>> GetCustomerWithAddressesAsync(string userId)
+        {
+            var operationResult = new OperationResult<Customer>();
+
+            var customerWithAddresses = await unitOfWork.CustomerRepository.GetCustomerWithAddressesAsync(userId);
+
+            if (customerWithAddresses is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
+            }
+
+            operationResult.Data = customerWithAddresses;
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<Customer>> GetCustomerWithPhoneNumbersAsync(string userId)
+        {
+            var operationResult = new OperationResult<Customer>();
+
+            var customerWithPhoneNumbers = await unitOfWork.CustomerRepository.GetCustomerWithPhoneNumbersAsync(userId);
+
+            if (customerWithPhoneNumbers is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+            }
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<Customer>> GetCustomerWithEmailsAsync(string userId)
+        {
+            var operationResult = new OperationResult<Customer>();
+
+            var customerWithEmails = await unitOfWork.CustomerRepository.GetCustomerWithEmailsAsync(userId);
+
+            if (customerWithEmails is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+            }
+
             return operationResult;
         }
 
@@ -235,6 +281,5 @@ namespace Services.Entity.Customers
 
             return operationResult;
         }
-
     }
 }
