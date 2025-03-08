@@ -89,7 +89,9 @@ namespace Services.Entity.Addresses
                 }
             }
 
-            var addressIdsForAddressesToDelete = addresses.Where(x => addressEditDtos.All(y => y.Id != x.Id)).Select(x => x.Id);
+            var editedAddressesIds = addressEditDtos.Select(x => x.Id);
+
+            var addressIdsForAddressesToDelete = addresses.Where(x => !editedAddressesIds.Contains(x.Id) && x.Id != 0).Select(x => x.Id);
 
             var archivedStatus = await unitOfWork.AddressStatusRepository.GetByIdAsync((long)AddressStatuses.Archived);
 
