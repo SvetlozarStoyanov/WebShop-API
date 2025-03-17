@@ -1,15 +1,12 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
 using Contracts.Services.Entity.PhoneNumbers;
-using Database.Entities.Addresses;
 using Database.Entities.Common.Enums.Statuses;
 using Database.Entities.Common.Nomenclatures.Statuses;
-using Database.Entities.Emails;
 using Database.Entities.PhoneNumbers;
 using Models.Common;
 using Models.Common.Enums;
-using Models.Dto.Addresses;
 using Models.Dto.PhoneNumbers;
-using Models.Dto.PhoneNumbers.Input;
+using Models.Dto.PhoneNumbers.Output;
 
 namespace Services.Entity.PhoneNumbers
 {
@@ -22,47 +19,30 @@ namespace Services.Entity.PhoneNumbers
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<OperationResult> UpdateCustomerPhoneNumbersAsync(ICollection<PhoneNumber> phoneNumbers, UpdatePhoneNumbersDto updatePhoneNumbersDto)
+        public async Task<OperationResult<IEnumerable<PhoneNumberDetailsDto>>> GetCustomerPhoneNumbersAsync(string userId)
         {
-            var operationResult = new OperationResult();
+            var operationResult = new OperationResult<IEnumerable<PhoneNumberDetailsDto>>();
 
-            if (updatePhoneNumbersDto.CreatedPhoneNumbers.Any())
-            {
-                operationResult.AppendErrors(await CreatePhoneNumbersAsync(phoneNumbers, updatePhoneNumbersDto.CreatedPhoneNumbers));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
+            var customerWithPhoneNumbers = await unitOfWork.CustomerRepository.GetCustomerWithPhoneNumbersAsync(userId);
 
-            if (updatePhoneNumbersDto.EditedPhoneNumbers.Any())
+            if (customerWithPhoneNumbers is null)
             {
-                operationResult.AppendErrors(await EditPhoneNumbersAsync(phoneNumbers, updatePhoneNumbersDto.EditedPhoneNumbers));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
-
-            if (updatePhoneNumbersDto.DeletedPhoneNumbers.Any())
-            {
-                operationResult.AppendErrors(await DeleteAddressesAsync(phoneNumbers, updatePhoneNumbersDto.DeletedPhoneNumbers));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
-
-            if (phoneNumbers.Where(x => x.Status.Name == PhoneNumberStatuses.Active.ToString()).Count(x => x.IsMain) != 1)
-            {
-                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"Can only have only 1 main {nameof(PhoneNumber)}!"));
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
+
+            operationResult.Data = customerWithPhoneNumbers.PhoneNumbers.Select(x => new PhoneNumberDetailsDto()
+            {
+                Id = x.Id,
+                Number = x.Number,
+                IsMain = x.IsMain,
+                CountryId = x.CountryId,
+            });
 
             return operationResult;
         }
 
-        private async Task<OperationResult> CreatePhoneNumbersAsync(ICollection<PhoneNumber> phoneNumbers, IEnumerable<PhoneNumberCreateDto> createDtos)
+        public async Task<OperationResult> UpdateCustomerPhoneNumbersAsync(ICollection<PhoneNumber> phoneNumbers, IEnumerable<PhoneNumberUpdateDto> phoneNumberUpdateDtos)
         {
             var operationResult = new OperationResult();
 
@@ -73,63 +53,37 @@ namespace Services.Entity.PhoneNumbers
                 throw new InvalidOperationException($"{nameof(PhoneNumberStatus)} of type: {PhoneNumberStatuses.Active} was not found!");
             }
 
-            foreach (var createDto in createDtos)
+            foreach (var phoneNumberUpdateDto in phoneNumberUpdateDtos)
             {
-                var country = await unitOfWork.CountryRepository.GetByIdAsync(createDto.CountryId);
-
-                if (country is null)
+                if (phoneNumberUpdateDto.Id is null)
                 {
-                    operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with see {createDto.CountryId} was not found!"));
-                    return operationResult;
+                    var phoneNumberCreateOperationResult = await CreatePhoneNumberAsync(phoneNumberUpdateDto, activeStatus);
+
+                    if (!phoneNumberCreateOperationResult.IsSuccessful)
+                    {
+                        operationResult.AppendErrors(phoneNumberCreateOperationResult);
+                        return operationResult;
+                    }
+
+                    phoneNumbers.Add(phoneNumberCreateOperationResult.Data);
                 }
-
-                var phoneNumber = new PhoneNumber()
+                else
                 {
-                    Number = createDto.Number,
-                    IsMain = createDto.IsMain,
-                    Country = country,
-                    Status = activeStatus,
-                };
+                    var phoneNumber = phoneNumbers.FirstOrDefault(x => x.Id == phoneNumberUpdateDto.Id);
+                    if (phoneNumber is null)
+                    {
+                        operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(PhoneNumber)} with id: {phoneNumberUpdateDto.Id} was not found!"));
+                        return operationResult;
+                    }
 
-                phoneNumbers.Add(phoneNumber);
+                    var updatePhoneNumberOperationResult = await UpdatePhoneNumberAsync(phoneNumberUpdateDto, phoneNumber);
+                    if (!updatePhoneNumberOperationResult.IsSuccessful)
+                    {
+                        operationResult.AppendErrors(updatePhoneNumberOperationResult);
+                        return operationResult;
+                    }
+                }
             }
-
-            return operationResult;
-        }
-
-        private async Task<OperationResult> EditPhoneNumbersAsync(ICollection<PhoneNumber> phoneNumbers, IEnumerable<PhoneNumberEditDto> editDtos)
-        {
-            var operationResult = new OperationResult();
-
-            foreach (var editDto in editDtos)
-            {
-                var phoneNumber = phoneNumbers.FirstOrDefault(a => a.Id == editDto.Id);
-
-                if (phoneNumber is null)
-                {
-                    operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Address)} with Id - {editDto.Id} was not found!"));
-                    return operationResult;
-                }
-
-                var country = await unitOfWork.CountryRepository.GetByIdAsync(editDto.CountryId);
-
-                if (country is null)
-                {
-                    operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with see {editDto.CountryId} was not found!"));
-                    return operationResult;
-                }
-
-                phoneNumber.Number = editDto.Number;
-                phoneNumber.IsMain = editDto.IsMain;
-                phoneNumber.Country = country;
-            }
-
-            return operationResult;
-        }
-
-        private async Task<OperationResult> DeleteAddressesAsync(ICollection<PhoneNumber> phoneNumbers, IEnumerable<PhoneNumberDeleteDto> deleteDtos)
-        {
-            var operationResult = new OperationResult();
 
             var archivedStatus = await unitOfWork.PhoneNumberStatusRepository.GetByIdAsync((long)PhoneNumberStatuses.Archived);
 
@@ -137,19 +91,81 @@ namespace Services.Entity.PhoneNumbers
             {
                 throw new InvalidOperationException($"{nameof(PhoneNumberStatus)} of type: {PhoneNumberStatuses.Active} was not found!");
             }
+            var updatedPhoneNumberIds = phoneNumberUpdateDtos.Select(x => x.Id);
 
-            foreach (var deleteDto in deleteDtos)
+            var phoneNumberIdsForPhoneNumbersToDelete = phoneNumbers.Where(x => !updatedPhoneNumberIds.Contains(x.Id) && x.Id != 0).Select(x => x.Id);
+
+            foreach (var deletedId in phoneNumberIdsForPhoneNumbersToDelete)
             {
-                var address = phoneNumbers.FirstOrDefault(x => x.Id == deleteDto.Id);
-
-                if (address is null)
-                {
-                    operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(PhoneNumber)} with Id - {deleteDto.Id} was not found!"));
-                    return operationResult;
-                }
-
-                address.Status = archivedStatus;
+                DeletePhoneNumber(deletedId, archivedStatus, phoneNumbers);
             }
+
+            if (phoneNumbers.Count(x => x.Status.Name == activeStatus.Name && x.IsMain) != 1)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"Must have 1 main {nameof(PhoneNumber)}"));
+                return operationResult;
+            }
+
+            return operationResult;
+        }
+
+        private async Task<OperationResult<PhoneNumber>> CreatePhoneNumberAsync(PhoneNumberUpdateDto phoneNumberUpdateDto, PhoneNumberStatus activeStatus)
+        {
+            var operationResult = new OperationResult<PhoneNumber>();
+
+            var country = await unitOfWork.CountryRepository.GetByIdAsync(phoneNumberUpdateDto.CountryId);
+
+            if (country is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with see {phoneNumberUpdateDto.CountryId} was not found!"));
+                return operationResult;
+            }
+
+            var phoneNumber = new PhoneNumber()
+            {
+                Number = phoneNumberUpdateDto.Number,
+                IsMain = phoneNumberUpdateDto.IsMain,
+                Country = country,
+                Status = activeStatus,
+            };
+
+            operationResult.Data = phoneNumber;
+
+            return operationResult;
+        }
+
+        private async Task<OperationResult> UpdatePhoneNumberAsync(PhoneNumberUpdateDto phoneNumberUpdateDto, PhoneNumber phoneNumber)
+        {
+            var operationResult = new OperationResult();
+
+            var country = await unitOfWork.CountryRepository.GetByIdAsync(phoneNumberUpdateDto.CountryId);
+
+            if (country is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with id: {phoneNumberUpdateDto.CountryId} was not found!"));
+                return operationResult;
+            }
+
+            phoneNumber.Number = phoneNumberUpdateDto.Number;
+            phoneNumber.IsMain = phoneNumberUpdateDto.IsMain;
+            phoneNumber.Country = country;
+
+            return operationResult;
+        }
+
+        private OperationResult DeletePhoneNumber(long id, PhoneNumberStatus archivedStatus, IEnumerable<PhoneNumber> phoneNumbers)
+        {
+            var operationResult = new OperationResult();
+
+            var phoneNumber = phoneNumbers.FirstOrDefault(x => x.Id == id);
+
+            if (phoneNumber is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(PhoneNumber)} with Id - {id} was not found!"));
+                return operationResult;
+            }
+
+            phoneNumber.Status = archivedStatus;
 
             return operationResult;
         }

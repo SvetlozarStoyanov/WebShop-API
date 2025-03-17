@@ -2,7 +2,7 @@
 
 namespace Models.Dto.Addresses.Input
 {
-    public class AddressEditDto
+    public class AddressUpdateDto
     {
         public long? Id { get; set; }
         [Required]

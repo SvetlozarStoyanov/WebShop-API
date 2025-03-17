@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Models.Dto.PhoneNumbers
+﻿namespace Models.Dto.PhoneNumbers.Output
 {
-    public class PhoneNumberEditDto
+    public class PhoneNumberDetailsDto
     {
         public long Id { get; set; }
-        [Required]
         public string Number { get; set; }
         public bool IsMain { get; set; }
         public long CountryId { get; set; }

@@ -9,9 +9,7 @@
   <ItemGroup>
     <Folder Include="Dto\Countries\Input\" />
     <Folder Include="Dto\Customers\Output\" />
-    <Folder Include="Dto\Emails\Output\" />
     <Folder Include="Dto\Orders\Output\" />
-    <Folder Include="Dto\PhoneNumbers\Output\" />
   </ItemGroup>
 
 </Project>

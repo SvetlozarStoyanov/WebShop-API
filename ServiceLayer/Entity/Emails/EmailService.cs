@@ -1,13 +1,13 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
 using Contracts.Services.Entity.Emails;
-using Database.Entities.Addresses;
 using Database.Entities.Common.Enums.Statuses;
 using Database.Entities.Common.Nomenclatures.Statuses;
 using Database.Entities.Emails;
+using Database.Entities.PhoneNumbers;
 using Models.Common;
 using Models.Common.Enums;
-using Models.Dto.Addresses;
 using Models.Dto.Emails.Input;
+using Models.Dto.Emails.Output;
 
 namespace Services.Entity.Emails
 {
@@ -20,53 +20,29 @@ namespace Services.Entity.Emails
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<OperationResult> UpdateCustomerEmailsAsync(ICollection<Email> emails, UpdateEmailsDto updateEmailsDto)
+        public async Task<OperationResult<IEnumerable<EmailDetailsDto>>> GetCustomerEmailsAsync(string userId)
         {
-            var operationResult = new OperationResult();
+            var operationResult = new OperationResult<IEnumerable<EmailDetailsDto>>();
 
-            if (updateEmailsDto.CreatedEmails.Any())
-            {
-                operationResult.AppendErrors(await CreateEmailsAsync(emails, updateEmailsDto.CreatedEmails));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
+            var customerWithEmails = await unitOfWork.CustomerRepository.GetCustomerWithEmailsAsync(userId);
 
-            if (updateEmailsDto.EditedEmails.Any())
+            if (customerWithEmails is null)
             {
-                operationResult.AppendErrors(EditEmails(emails, updateEmailsDto.EditedEmails));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
-
-            if (updateEmailsDto.DeletedEmails.Any())
-            {
-                operationResult.AppendErrors(await DeleteEmailsAsync(emails, updateEmailsDto.DeletedEmails));
-                if (!operationResult.IsSuccessful)
-                {
-                    return operationResult;
-                }
-            }
-
-            if (emails.Where(x => x.Status.Name == EmailStatuses.Active.ToString()).Count(x => x.IsMain) != 1)
-            {
-                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"Can only have only 1 main {nameof(Email)}!"));
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 
-            if (emails.DistinctBy(x => x.Address).Count() != emails.Count)
+            operationResult.Data = customerWithEmails.Emails.Select(x => new EmailDetailsDto()
             {
-                operationResult.AppendError(new Error(ErrorTypes.BadRequest, "Cannot have multiple emails with same address!"));
-                return operationResult;
-            }
+                Id = x.Id,
+                Address = x.Address,
+                IsMain = x.IsMain
+            });
 
             return operationResult;
         }
 
-        private async Task<OperationResult> CreateEmailsAsync(ICollection<Email> emails, IEnumerable<EmailCreateDto> createDtos)
+        public async Task<OperationResult> UpdateCustomerEmailsAsync(ICollection<Email> emails, IEnumerable<EmailUpdateDto> emailUpdateDtos)
         {
             var operationResult = new OperationResult();
 
@@ -74,68 +50,104 @@ namespace Services.Entity.Emails
 
             if (activeStatus is null)
             {
-                throw new InvalidOperationException($"{nameof(AddressStatus)} of type: {AddressStatuses.Active} was not found!");
+                throw new InvalidOperationException($"{nameof(EmailStatus)} of type: {EmailStatuses.Active} was not found!");
             }
 
-            foreach (var createDto in createDtos)
+            foreach (var emailUpdateDto in emailUpdateDtos)
             {
-                var email = new Email()
+                if (emailUpdateDto.Id is null)
                 {
-                    Address = createDto.Address,
-                    IsMain = createDto.IsMain,
-                    Status = activeStatus,
-                };
+                    var emailCreateOperationResult = CreateEmail(emailUpdateDto, activeStatus);
+                    if (!emailCreateOperationResult.IsSuccessful)
+                    {
+                        operationResult.AppendErrors(emailCreateOperationResult);
+                        return operationResult;
+                    }
 
-                emails.Add(email);
-            }
-
-            return operationResult;
-        }
-
-        private OperationResult EditEmails(ICollection<Email> emails, IEnumerable<EmailEditDto> editDtos)
-        {
-            var operationResult = new OperationResult();
-
-            foreach (var editDto in editDtos)
-            {
-                var email = emails.FirstOrDefault(a => a.Id == editDto.Id);
-
-                if (email is null)
-                {
-                    operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Address)} with Id - {editDto.Id} was not found!"));
-                    return operationResult;
+                    emails.Add(emailCreateOperationResult.Data);
                 }
+                else
+                {
+                    var email = emails.FirstOrDefault(x => x.Id == emailUpdateDto.Id);
+                    if (email is null)
+                    {
+                        operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Email with id: {emailUpdateDto.Id} was not found!"));
+                        return operationResult;
+                    }
 
-                email.Address = editDto.Address;
-                email.IsMain = editDto.IsMain;
+                    var updateEmailOperationResult = UpdateEmail(emailUpdateDto, email);
+                    if (!updateEmailOperationResult.IsSuccessful)
+                    {
+                        operationResult.AppendErrors(updateEmailOperationResult);
+                        return operationResult;
+                    }
+                }
             }
 
-            return operationResult;
-        }
+            var editedEmailIds = emailUpdateDtos.Select(x => x.Id);
 
-        private async Task<OperationResult> DeleteEmailsAsync(ICollection<Email> emails, IEnumerable<EmailDeleteDto> deleteDtos)
-        {
-            var operationResult = new OperationResult();
+            var emailIdsForEmailsToDelete = emails.Where(x => !editedEmailIds.Contains(x.Id) && x.Id != 0).Select(x => x.Id);
 
             var archivedStatus = await unitOfWork.EmailStatusRepository.GetByIdAsync((long)EmailStatuses.Archived);
 
             if (archivedStatus is null)
             {
-                throw new InvalidOperationException($"{nameof(AddressStatus)} of type: {AddressStatuses.Active} was not found!");
+                throw new InvalidOperationException($"{nameof(EmailStatus)} of type: {EmailStatuses.Archived} was not found!");
             }
 
-            foreach (var deleteDto in deleteDtos)
+            foreach (var deletedId in emailIdsForEmailsToDelete)
             {
-                var address = emails.FirstOrDefault(x => x.Id == deleteDto.Id);
-
-                if (address is null)
-                {
-                    operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Email)} with Id - {deleteDto.Id} was not found!"));
-                    return operationResult;
-                }
-
-                address.Status = archivedStatus;
+                DeleteEmail(deletedId, archivedStatus, emails);
             }
+
+            if (emails.Count(x => x.Status.Name == activeStatus.Name && x.IsMain) != 1)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"Must have 1 main {nameof(Email)}"));
+                return operationResult;
+            }
+
+            return operationResult;
+        }
+
+        private OperationResult<Email> CreateEmail(EmailUpdateDto emailUpdateDto, EmailStatus status)
+        {
+            var operationResult = new OperationResult<Email>();
+
+            var email = new Email()
+            {
+                Address = emailUpdateDto.Address,
+                IsMain = emailUpdateDto.IsMain,
+                Status = status,
+            };
+
+            operationResult.Data = email;
+
+            return operationResult;
+        }
+
+        private OperationResult UpdateEmail(EmailUpdateDto emailUpdateDto, Email email)
+        {
+            var operationResult = new OperationResult();
+
+            email.Address = emailUpdateDto.Address;
+            email.IsMain = emailUpdateDto.IsMain;
+
+            return operationResult;
+        }
+
+        private OperationResult DeleteEmail(long id, EmailStatus archivedStatus, ICollection<Email> emails)
+        {
+            var operationResult = new OperationResult();
+
+            var email = emails.FirstOrDefault(x => x.Id == id);
+
+            if (email is null)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Email)} with Id - {id} was not found!"));
+                return operationResult;
+            }
+
+            email.Status = archivedStatus;
 
             return operationResult;
         }

@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Models.Dto.Emails.Input
+﻿namespace Models.Dto.Emails.Output
 {
-    public class EmailEditDto
+    public class EmailDetailsDto
     {
         public long Id { get; set; }
-        [Required]
         public string Address { get; set; }
         public bool IsMain { get; set; }
     }

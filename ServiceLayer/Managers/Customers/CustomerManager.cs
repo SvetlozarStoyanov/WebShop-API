@@ -7,7 +7,7 @@ using Contracts.Services.Managers.Customers;
 using Models.Common;
 using Models.Dto.Addresses.Input;
 using Models.Dto.Emails.Input;
-using Models.Dto.PhoneNumbers.Input;
+using Models.Dto.PhoneNumbers;
 
 namespace Services.Managers.Customers
 {
@@ -32,7 +32,7 @@ namespace Services.Managers.Customers
             this.emailService = emailService;
         }
 
-        public async Task<OperationResult> UpdateCustomerAddressesAsync(string userId, IEnumerable<AddressEditDto> AddressEditDtos)
+        public async Task<OperationResult> UpdateCustomerAddressesAsync(string userId, IEnumerable<AddressUpdateDto> addressUpdateDtos)
         {
             var operationResult = new OperationResult();
 
@@ -46,7 +46,7 @@ namespace Services.Managers.Customers
 
             var customer = getCustomerOperationResult.Data;
 
-            operationResult.AppendErrors(await addressService.UpdateCustomerAddressesAsync(customer.Addresses, AddressEditDtos));
+            operationResult.AppendErrors(await addressService.UpdateCustomerAddressesAsync(customer.Addresses, addressUpdateDtos));
             if (!operationResult.IsSuccessful)
             {
                 return operationResult;
@@ -57,7 +57,7 @@ namespace Services.Managers.Customers
             return operationResult;
         }
 
-        public async Task<OperationResult> UpdateCustomerPhoneNumbersAsync(string userId, UpdatePhoneNumbersDto updatePhoneNumbersDto)
+        public async Task<OperationResult> UpdateCustomerPhoneNumbersAsync(string userId, IEnumerable<PhoneNumberUpdateDto> phoneNumberUpdateDtos)
         {
             var operationResult = new OperationResult();
 
@@ -71,16 +71,18 @@ namespace Services.Managers.Customers
 
             var customer = getCustomerOperationResult.Data;
 
-            operationResult.AppendErrors(await phoneNumberService.UpdateCustomerPhoneNumbersAsync(customer.PhoneNumbers, updatePhoneNumbersDto));
+            operationResult.AppendErrors(await phoneNumberService.UpdateCustomerPhoneNumbersAsync(customer.PhoneNumbers, phoneNumberUpdateDtos));
             if (!operationResult.IsSuccessful)
             {
                 return operationResult;
             }
 
+            await unitOfWork.SaveChangesAsync();
+
             return operationResult;
         }
 
-        public async Task<OperationResult> UpdateCustomerEmailsAsync(string userId, UpdateEmailsDto updateEmailsDto)
+        public async Task<OperationResult> UpdateCustomerEmailsAsync(string userId, IEnumerable<EmailUpdateDto> emailUpdateDtos)
         {
             var operationResult = new OperationResult();
             var getCustomerOperationResult = await customerService.GetCustomerWithEmailsAsync(userId);
@@ -93,12 +95,13 @@ namespace Services.Managers.Customers
 
             var customer = getCustomerOperationResult.Data;
 
-            operationResult.AppendErrors(await emailService.UpdateCustomerEmailsAsync(customer.Emails, updateEmailsDto));
+            operationResult.AppendErrors(await emailService.UpdateCustomerEmailsAsync(customer.Emails, emailUpdateDtos));
             if (!operationResult.IsSuccessful)
             {
                 return operationResult;
             }
 
+            await unitOfWork.SaveChangesAsync();
 
             return operationResult;
         }

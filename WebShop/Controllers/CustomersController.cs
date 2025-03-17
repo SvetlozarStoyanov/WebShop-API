@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Dto.Addresses.Input;
-using Models.Dto.Customers;
 using Models.Dto.Emails.Input;
-using Models.Dto.PhoneNumbers.Input;
+using Models.Dto.PhoneNumbers;
 using WebShop.Extensions;
 
 namespace WebShop.Controllers
@@ -23,9 +22,9 @@ namespace WebShop.Controllers
 
         [HttpPut]
         [Route("edit-addresses")]
-        public async Task<IActionResult> EditAddresses(IEnumerable<AddressEditDto> addressEditDtos)
+        public async Task<IActionResult> EditAddresses(IEnumerable<AddressUpdateDto> addressUpdateDtos)
         {
-            var operationResult = await customerManager.UpdateCustomerAddressesAsync(User.GetId(), addressEditDtos);
+            var operationResult = await customerManager.UpdateCustomerAddressesAsync(User.GetId(), addressUpdateDtos);
 
             if (!operationResult.IsSuccessful)
             {
@@ -37,9 +36,9 @@ namespace WebShop.Controllers
 
         [HttpPut]
         [Route("edit-phone-numbers")]
-        public async Task<IActionResult> EditPhoneNumbers(UpdatePhoneNumbersDto updatePhoneNumbersDto)
+        public async Task<IActionResult> EditPhoneNumbers(IEnumerable<PhoneNumberUpdateDto> phoneNumberUpdateDtos)
         {
-            var operationResult = await customerManager.UpdateCustomerPhoneNumbersAsync(User.GetId(), updatePhoneNumbersDto);
+            var operationResult = await customerManager.UpdateCustomerPhoneNumbersAsync(User.GetId(), phoneNumberUpdateDtos);
 
             if (!operationResult.IsSuccessful)
             {
@@ -51,9 +50,9 @@ namespace WebShop.Controllers
 
         [HttpPut]
         [Route("edit-emails")]
-        public async Task<IActionResult> EditEmails(UpdateEmailsDto updateEmailsDto)
+        public async Task<IActionResult> EditEmails(IEnumerable<EmailUpdateDto> emailUpdateDtos)
         {
-            var operationResult = await customerManager.UpdateCustomerEmailsAsync(User.GetId(), updateEmailsDto);
+            var operationResult = await customerManager.UpdateCustomerEmailsAsync(User.GetId(), emailUpdateDtos);
 
             if (!operationResult.IsSuccessful)
             {

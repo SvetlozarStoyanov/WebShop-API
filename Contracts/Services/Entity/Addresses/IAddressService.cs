@@ -8,6 +8,6 @@ namespace Contracts.Services.Entity.Addresses
     public interface IAddressService
     {
         Task<OperationResult<IEnumerable<AddressDetailsDto>>> GetCustomerAddressesAsync(string userId);
-        Task<OperationResult> UpdateCustomerAddressesAsync(ICollection<Address> addresses, IEnumerable<AddressEditDto> addressEditDtos);
+        Task<OperationResult> UpdateCustomerAddressesAsync(ICollection<Address> addresses, IEnumerable<AddressUpdateDto> addressEditDtos);
     }
 }

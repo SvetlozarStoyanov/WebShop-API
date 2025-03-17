@@ -3,6 +3,7 @@ using Contracts.Services.Entity.Addresses;
 using Database.Entities.Addresses;
 using Database.Entities.Common.Enums.Statuses;
 using Database.Entities.Common.Nomenclatures.Statuses;
+using Database.Entities.PhoneNumbers;
 using Models.Common;
 using Models.Common.Enums;
 using Models.Dto.Addresses.Input;
@@ -47,7 +48,7 @@ namespace Services.Entity.Addresses
             return operationResult;
         }
 
-        public async Task<OperationResult> UpdateCustomerAddressesAsync(ICollection<Address> addresses, IEnumerable<AddressEditDto> addressEditDtos)
+        public async Task<OperationResult> UpdateCustomerAddressesAsync(ICollection<Address> addresses, IEnumerable<AddressUpdateDto> addressUpdateDtos)
         {
             var operationResult = new OperationResult();
 
@@ -58,11 +59,11 @@ namespace Services.Entity.Addresses
                 throw new InvalidOperationException($"{nameof(AddressStatus)} of type: {AddressStatuses.Active} was not found!");
             }
 
-            foreach (var addressEditDto in addressEditDtos)
+            foreach (var addressUpdateDto in addressUpdateDtos)
             {
-                if (addressEditDto.Id is null)
+                if (addressUpdateDto.Id is null)
                 {
-                    var addressCreateOperationResult = await CreateAddressAsync(addressEditDto, activeStatus);
+                    var addressCreateOperationResult = await CreateAddressAsync(addressUpdateDto, activeStatus);
                     if (!addressCreateOperationResult.IsSuccessful)
                     {
                         operationResult.AppendErrors(addressCreateOperationResult);
@@ -73,25 +74,25 @@ namespace Services.Entity.Addresses
                 }
                 else
                 {
-                    var address = addresses.FirstOrDefault(x => x.Id == addressEditDto.Id);
+                    var address = addresses.FirstOrDefault(x => x.Id == addressUpdateDto.Id);
                     if (address is null)
                     {
-                        operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Address with id: {addressEditDto.Id} was not found!"));
+                        operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Address with id: {addressUpdateDto.Id} was not found!"));
                         return operationResult;
                     }
 
-                    var editAddressOperationResult = await EditAddressAsync(address, addressEditDto);
-                    if (!editAddressOperationResult.IsSuccessful)
+                    var updateAddressOperationResult = await EditAddressAsync(addressUpdateDto, address);
+                    if (!updateAddressOperationResult.IsSuccessful)
                     {
-                        operationResult.AppendErrors(editAddressOperationResult);
+                        operationResult.AppendErrors(updateAddressOperationResult);
                         return operationResult;
                     }
                 }
             }
 
-            var editedAddressesIds = addressEditDtos.Select(x => x.Id);
+            var updatedAddressesIds = addressUpdateDtos.Select(x => x.Id);
 
-            var addressIdsForAddressesToDelete = addresses.Where(x => !editedAddressesIds.Contains(x.Id) && x.Id != 0).Select(x => x.Id);
+            var addressIdsForAddressesToDelete = addresses.Where(x => !updatedAddressesIds.Contains(x.Id) && x.Id != 0).Select(x => x.Id);
 
             var archivedStatus = await unitOfWork.AddressStatusRepository.GetByIdAsync((long)AddressStatuses.Archived);
 
@@ -105,28 +106,34 @@ namespace Services.Entity.Addresses
                 DeleteAddress(deletedId, archivedStatus, addresses);
             }
 
+            if (addresses.Count(x => x.Status.Name == activeStatus.Name && x.IsMain) != 1)
+            {
+                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"Must have 1 main {nameof(Address)}"));
+                return operationResult;
+            }
+
             return operationResult;
         }
 
-        private async Task<OperationResult<Address>> CreateAddressAsync(AddressEditDto editDto, AddressStatus activeStatus)
+        private async Task<OperationResult<Address>> CreateAddressAsync(AddressUpdateDto updateDto, AddressStatus activeStatus)
         {
             var operationResult = new OperationResult<Address>();
 
-            var country = await unitOfWork.CountryRepository.GetByIdAsync(editDto.CountryId);
+            var country = await unitOfWork.CountryRepository.GetByIdAsync(updateDto.CountryId);
 
             if (country is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with see {editDto.CountryId} was not found!"));
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with see {updateDto.CountryId} was not found!"));
                 return operationResult;
             }
 
             var address = new Address()
             {
-                AddressLineOne = editDto.AddressLineOne,
-                AddressLineTwo = editDto.AddressLineTwo,
-                IsMain = editDto.IsMain,
-                City = editDto.City,
-                PostCode = editDto.PostCode,
+                AddressLineOne = updateDto.AddressLineOne,
+                AddressLineTwo = updateDto.AddressLineTwo,
+                IsMain = updateDto.IsMain,
+                City = updateDto.City,
+                PostCode = updateDto.PostCode,
                 Country = country,
                 Status = activeStatus,
             };
@@ -136,23 +143,23 @@ namespace Services.Entity.Addresses
             return operationResult;
         }
 
-        private async Task<OperationResult> EditAddressAsync(Address address, AddressEditDto editDto)
+        private async Task<OperationResult> EditAddressAsync(AddressUpdateDto addressUpdateDto, Address address)
         {
             var operationResult = new OperationResult();
 
-            var country = await unitOfWork.CountryRepository.GetByIdAsync(editDto.CountryId);
+            var country = await unitOfWork.CountryRepository.GetByIdAsync(addressUpdateDto.CountryId);
 
             if (country is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with see {editDto.CountryId} was not found!"));
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"Country with see {addressUpdateDto.CountryId} was not found!"));
                 return operationResult;
             }
 
-            address.AddressLineOne = editDto.AddressLineOne;
-            address.AddressLineTwo = editDto.AddressLineTwo;
-            address.IsMain = editDto.IsMain;
-            address.City = editDto.City;
-            address.PostCode = editDto.PostCode;
+            address.AddressLineOne = addressUpdateDto.AddressLineOne;
+            address.AddressLineTwo = addressUpdateDto.AddressLineTwo;
+            address.IsMain = addressUpdateDto.IsMain;
+            address.City = addressUpdateDto.City;
+            address.PostCode = addressUpdateDto.PostCode;
             address.Country = country;
 
             return operationResult;

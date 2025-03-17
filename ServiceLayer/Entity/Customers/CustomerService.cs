@@ -117,7 +117,10 @@ namespace Services.Entity.Customers
             if (customerWithPhoneNumbers is null)
             {
                 operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
             }
+
+            operationResult.Data = customerWithPhoneNumbers;
 
             return operationResult;
         }
@@ -131,7 +134,10 @@ namespace Services.Entity.Customers
             if (customerWithEmails is null)
             {
                 operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
             }
+
+            operationResult.Data = customerWithEmails;
 
             return operationResult;
         }
