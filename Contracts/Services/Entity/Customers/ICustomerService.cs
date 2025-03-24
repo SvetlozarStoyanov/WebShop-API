@@ -2,6 +2,7 @@
 using Database.Entities.Identity;
 using Models.Common;
 using Models.Dto.Customers.Input;
+using Models.Dto.Customers.Output;
 
 namespace Contracts.Services.Entity.Customers
 {
@@ -14,7 +15,7 @@ namespace Contracts.Services.Entity.Customers
         Task<OperationResult<Customer>> GetCustomerWithPhoneNumbersAsync(string userId);
         Task<OperationResult<Customer>> GetCustomerWithEmailsAsync(string userId);
 
-        Task<OperationResult<Customer>> GetCustomerWithPersonalDetailsAsync(string userId);
+        Task<OperationResult<CustomerDetailsDto>> GetCustomerDetailsAsync(string userId);
 
     }
 }

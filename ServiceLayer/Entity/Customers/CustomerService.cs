@@ -12,9 +12,14 @@ using Microsoft.VisualBasic;
 using Models.Common;
 using Models.Common.Enums;
 using Models.Dto.Addresses.Input;
+using Models.Dto.Addresses.Output;
 using Models.Dto.Customers.Input;
+using Models.Dto.Customers.Output;
 using Models.Dto.Emails.Input;
+using Models.Dto.Emails.Output;
 using Models.Dto.PhoneNumbers.Input;
+using Models.Dto.PhoneNumbers.Output;
+using Models.Dto.Users.Output;
 
 namespace Services.Entity.Customers
 {
@@ -142,18 +147,55 @@ namespace Services.Entity.Customers
             return operationResult;
         }
 
-        public async Task<OperationResult<Customer>> GetCustomerWithPersonalDetailsAsync(string userId)
+
+        public async Task<OperationResult<CustomerDetailsDto>> GetCustomerDetailsAsync(string userId)
         {
-            var operationResult = new OperationResult<Customer>();
-            var customer = await unitOfWork.CustomerRepository.GetCustomerWithPersonalDetailsAsync(userId);
+            var operationResult = new OperationResult<CustomerDetailsDto>();
+            var customer = await unitOfWork.CustomerRepository.GetCustomerWithPersonalDetailsAsNoTrackingAsync(userId);
 
             if (customer is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Customer)} with user id - {userId} was not found!"));
+                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 
-            operationResult.Data = customer;
+            var userDto = new CustomerDetailsDto()
+            {
+                User = new UserDetailsDto()
+                {
+                    UserName = customer.User.UserName,
+                    FirstName = customer.User.FirstName,
+                    MiddleName = customer.User.MiddleName,
+                    LastName = customer.User.LastName,
+                },
+                Addresses = customer.Addresses.Select(x => new AddressDetailsDto
+                {
+                    Id = x.Id,
+                    AddressLineOne = x.AddressLineOne,
+                    AddressLineTwo = x.AddressLineTwo,
+                    City = x.City,
+                    PostCode = x.PostCode,
+                    CountryId = x.CountryId,
+                    CountryName = x.Country.Name,
+                    IsMain = x.IsMain,
+                }),
+                PhoneNumbers = customer.PhoneNumbers.Select(x => new PhoneNumberDetailsDto()
+                {
+                    Id = x.Id,
+                    Number = x.Number,
+                    CountryId = x.CountryId,
+                    CountryName = x.Country.Name,
+                    IsMain = x.IsMain,
+                }),
+                Emails = customer.Emails.Select(x => new EmailDetailsDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    IsMain = x.IsMain
+                })
+            };
+
+            operationResult.Data = userDto;
 
             return operationResult;
         }
@@ -161,7 +203,6 @@ namespace Services.Entity.Customers
         private async Task<OperationResult<List<Address>>> CreateCustomerAddressesAsync(IEnumerable<AddressCreateDto> addressDtos)
         {
             var operationResult = new OperationResult<List<Address>>();
-
 
             if (addressDtos.Count(x => x.IsMain) != 1)
             {

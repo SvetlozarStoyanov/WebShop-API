@@ -10,5 +10,7 @@ namespace Contracts.DataAccess.Repositories.Customers
         Task<Customer?> GetCustomerWithPhoneNumbersAsync(string userId);
         Task<Customer?> GetCustomerWithEmailsAsync(string userId);
         Task<Customer?> GetCustomerWithPersonalDetailsAsync(string userId);
+        Task<Customer?> GetCustomerWithPersonalDetailsAsNoTrackingAsync(string userId);
+
     }
 }

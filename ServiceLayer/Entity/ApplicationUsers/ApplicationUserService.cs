@@ -3,7 +3,10 @@ using Contracts.Services.Entity.ApplicationUsers;
 using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
-using Models.Dto.Users.Output;
+using Models.Dto.Addresses.Output;
+using Models.Dto.Customers.Output;
+using Models.Dto.Emails.Output;
+using Models.Dto.PhoneNumbers.Output;
 
 namespace Services.Entity.ApplicationUsers
 {
@@ -30,28 +33,5 @@ namespace Services.Entity.ApplicationUsers
             return usernames;
         }
 
-        public async Task<OperationResult<UserProfileDto>> GetUserProfileAsync(string userId)
-        {
-            var operationResult = new OperationResult<UserProfileDto>();
-            var user = await unitOfWork.UserRepository.FindByConditionAsNoTracking(x => x.Id == userId)
-                .Select(x => new UserProfileDto()
-                {
-                    UserName = x.UserName,
-                    FirstName = x.FirstName,
-                    MiddleName = x.MiddleName,
-                    LastName = x.LastName,
-                })
-                .FirstOrDefaultAsync();
-
-            if (user is null)
-            {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
-                return operationResult;
-            }
-
-            operationResult.Data = user;
-
-            return operationResult;
-        }
     }
 }

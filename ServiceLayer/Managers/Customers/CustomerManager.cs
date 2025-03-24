@@ -6,6 +6,7 @@ using Contracts.Services.Entity.PhoneNumbers;
 using Contracts.Services.Managers.Customers;
 using Models.Common;
 using Models.Dto.Addresses.Input;
+using Models.Dto.Customers.Output;
 using Models.Dto.Emails.Input;
 using Models.Dto.PhoneNumbers;
 
@@ -102,6 +103,13 @@ namespace Services.Managers.Customers
             }
 
             await unitOfWork.SaveChangesAsync();
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<CustomerDetailsDto>> GetCustomerDetailsAsync(string userId)
+        {
+            var operationResult = await customerService.GetCustomerDetailsAsync(userId);
 
             return operationResult;
         }

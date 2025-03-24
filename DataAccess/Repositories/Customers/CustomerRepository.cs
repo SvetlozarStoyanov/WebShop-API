@@ -54,6 +54,16 @@ namespace DataAccess.Repositories.Customers
                 .FirstOrDefaultAsync();
         }
 
-
+        public async Task<Customer?> GetCustomerWithPersonalDetailsAsNoTrackingAsync(string userId)
+        {
+            return await FindByConditionAsNoTracking(x => x.UserId == userId)
+                .Include(x => x.User)
+                .Include(x => x.Addresses.Where(y => y.StatusId == (long)AddressStatuses.Active))
+                .ThenInclude(x => x.Country)
+                .Include(x => x.Emails.Where(y => y.StatusId == (long)EmailStatuses.Active))
+                .Include(x => x.PhoneNumbers.Where(y => y.StatusId == (long)PhoneNumberStatuses.Active))
+                .ThenInclude(x => x.Country)
+                .FirstOrDefaultAsync();
+        }
     }
 }

@@ -33,21 +33,6 @@ namespace WebShop.Controllers
             return Ok(userNames);
         }
 
-
-        [HttpGet]
-        [Route("get-own-profile")]
-        public async Task<IActionResult> GetOwnProfile()
-        {
-            var operationResult = await applicationUserService.GetUserProfileAsync(User.GetId());
-
-            if (!operationResult.IsSuccessful)
-            {
-                return this.Error(operationResult);
-            }
-
-            return Ok(operationResult.Data);
-        }
-
         [HttpGet]
         [Route("get-profile-picture")]
         public async Task<IActionResult> GetProfilePicture()

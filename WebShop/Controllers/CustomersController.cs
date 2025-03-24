@@ -61,6 +61,20 @@ namespace WebShop.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        [Route("own-details")]
+        public async Task<IActionResult> GetOwnDetails()
+        {
+            var operationResult = await customerManager.GetCustomerDetailsAsync(User.GetId());
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
         
     }
 }
