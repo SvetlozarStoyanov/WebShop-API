@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Dto\Countries\Input\" />
-    <Folder Include="Dto\Customers\Output\" />
     <Folder Include="Dto\Orders\Output\" />
   </ItemGroup>
 
