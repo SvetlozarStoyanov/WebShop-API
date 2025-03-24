@@ -6,6 +6,7 @@
         public string Number { get; set; }
         public bool IsMain { get; set; }
         public long CountryId { get; set; }
+        public string PhoneCode { get; set; }
         public string CountryName { get; set; }
     }
 }

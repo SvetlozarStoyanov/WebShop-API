@@ -184,6 +184,7 @@ namespace Services.Entity.Customers
                     Id = x.Id,
                     Number = x.Number,
                     CountryId = x.CountryId,
+                    PhoneCode = x.Country.PhoneCode,
                     CountryName = x.Country.Name,
                     IsMain = x.IsMain,
                 }),
