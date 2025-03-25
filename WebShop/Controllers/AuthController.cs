@@ -2,6 +2,8 @@
 using Contracts.Services.Entity.Customers;
 using Contracts.Services.Identity;
 using Contracts.Services.JWT;
+using Contracts.Services.Managers.ApplicationUsers;
+using Contracts.Services.Managers.Customers;
 using Database.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,20 +22,20 @@ namespace WebShop.Controllers
         private readonly ICustomUserManager customUserManager;
         private readonly RoleManager<ApplicationRole> roleManager;
         private readonly IJwtService jwtService;
-        private readonly ICustomerService customerService;
-        private readonly IApplicationUserService userService;
+        private readonly ICustomerManager customerManager;
+        private readonly IApplicationUserManager applicationUserManager;
 
         public AuthController(ICustomUserManager customUserManager,
             RoleManager<ApplicationRole> roleManager,
             IJwtService jWTService,
-            ICustomerService customerService,
-            IApplicationUserService userService)
+            ICustomerManager customerManager,
+            IApplicationUserManager applicationUserManager)
         {
             this.customUserManager = customUserManager;
             this.roleManager = roleManager;
             this.jwtService = jWTService;
-            this.customerService = customerService;
-            this.userService = userService;
+            this.customerManager = customerManager;
+            this.applicationUserManager = applicationUserManager;
         }
 
         [AllowAnonymous]
@@ -87,14 +89,14 @@ namespace WebShop.Controllers
                 UserName = userRegisterDto.UserName,
             };
 
-            var userNameIsTaken = await userService.IsUserNameTakenAsync(userRegisterDto.UserName);
+            var userNameIsTaken = await applicationUserManager.IsUserNameTakenAsync(userRegisterDto.UserName);
 
             if (userNameIsTaken)
             {
                 return BadRequest($"Username - {userRegisterDto.UserName} is already taken!");
             }
 
-            var operationResult = await customerService.CreateCustomerAsync(user, userRegisterDto.Customer);
+            var operationResult = await customerManager.CreateCustomerAsync(user, userRegisterDto.Customer);
 
             if (!operationResult.IsSuccessful)
             {
@@ -128,8 +130,7 @@ namespace WebShop.Controllers
             var userLoginOutputDto = new UserLoginOutputDto()
             {
                 Id = user.Id,
-                UserName = user.UserName,
-                ProfilePicture = user.ProfilePicture
+                UserName = user.UserName
             };
 
             return Ok(userLoginOutputDto);
@@ -144,6 +145,7 @@ namespace WebShop.Controllers
             {
                 Response.Cookies.Delete("jwt");
             }
+
             return Ok();
         }
 

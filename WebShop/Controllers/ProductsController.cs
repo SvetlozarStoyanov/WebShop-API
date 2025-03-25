@@ -1,4 +1,4 @@
-﻿using Contracts.Services.Entity.Products;
+﻿using Contracts.Services.Managers.Products;
 using Microsoft.AspNetCore.Mvc;
 using Models.Dto.Products.Input;
 
@@ -8,18 +8,18 @@ namespace WebShop.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService productService;
+        private readonly IProductManager productManager;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductManager productManager)
         {
-            this.productService = productService;
+            this.productManager = productManager;
         }
 
         [HttpGet]
         [Route("all")]
         public async Task<IActionResult> GetAll()
         {
-            var products = await productService.GetAllProductsAsync();
+            var products = await productManager.GetAllProductsAsync();
 
             return Ok(products);
         }
@@ -28,7 +28,7 @@ namespace WebShop.Controllers
         [Route("filter")]
         public async Task<IActionResult> Filter([FromQuery]ProductsQueryInputDto queryInputDto)
         {
-            var queryOutputDto = await productService.GetFilteredProductsAsync(queryInputDto);
+            var queryOutputDto = await productManager.GetFilteredProductsAsync(queryInputDto);
 
             return Ok(queryOutputDto);
         }

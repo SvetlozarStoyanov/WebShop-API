@@ -1,6 +1,6 @@
 ﻿using Contracts.Services.Entity.PhoneNumbers;
+using Contracts.Services.Managers.Customers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Extensions;
 
@@ -11,18 +11,18 @@ namespace WebShop.Controllers
     [ApiController]
     public class PhoneNumbersController : ControllerBase
     {
-        private readonly IPhoneNumberService phoneNumberService;
+        private readonly ICustomerManager customerManager;
 
-        public PhoneNumbersController(IPhoneNumberService phoneNumberService)
+        public PhoneNumbersController(ICustomerManager customerManager)
         {
-            this.phoneNumberService = phoneNumberService;
+            this.customerManager = customerManager;
         }
         
         [HttpGet]
         [Route("get-customer-phone-numbers")]
         public async Task<IActionResult> GetCustomerPhoneNumbersAsync()
         {
-            var operationResult = await phoneNumberService.GetCustomerPhoneNumbersAsync(User.GetId());
+            var operationResult = await customerManager.GetCustomerPhoneNumbersAsync(User.GetId());
 
             if (!operationResult.IsSuccessful)
             {

@@ -1,4 +1,5 @@
 ﻿using Contracts.Services.Entity.Addresses;
+using Contracts.Services.Managers.Customers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Extensions;
@@ -10,18 +11,18 @@ namespace WebShop.Controllers
     [ApiController]
     public class AddressesController : ControllerBase
     {
-        private readonly IAddressService addressService;
+        private readonly ICustomerManager customerManager;
 
-        public AddressesController(IAddressService addressService)
+        public AddressesController(ICustomerManager customerManager)
         {
-            this.addressService = addressService;
+            this.customerManager = customerManager;
         }
 
         [HttpGet]
         [Route("get-customer-addresses")]
         public async Task<IActionResult> GetCustomerAddresses()
         {
-            var operationResult = await addressService.GetCustomerAddressesAsync(User.GetId());
+            var operationResult = await customerManager.GetCustomerAddressesAsync(User.GetId());
 
             if (!operationResult.IsSuccessful)
             {

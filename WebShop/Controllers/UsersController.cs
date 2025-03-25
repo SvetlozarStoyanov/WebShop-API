@@ -1,7 +1,5 @@
-﻿using Contracts.Services.Entity.ApplicationUsers;
-using Contracts.Services.ProfilePictures;
+﻿using Contracts.Services.Managers.ApplicationUsers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Extensions;
 
@@ -12,23 +10,19 @@ namespace WebShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IApplicationUserService applicationUserService;
-        private readonly IProfilePictureService profilePictureService;
+        private readonly IApplicationUserManager applicationUserManager;
 
-
-        public UsersController(IApplicationUserService applicationUserService, IProfilePictureService profilePictureService)
+        public UsersController(IApplicationUserManager applicationUserManager)
         {
-            this.applicationUserService = applicationUserService;
-            this.profilePictureService = profilePictureService;
+            this.applicationUserManager = applicationUserManager;
         }
-
 
         [AllowAnonymous]
         [HttpGet]
         [Route("all-usernames")]
         public async Task<IActionResult> GetAllUserNames()
         {
-            var userNames = await applicationUserService.GetAllUserNamesAsync();
+            var userNames = await applicationUserManager.GetAllUserNamesAsync();
 
             return Ok(userNames);
         }
@@ -37,13 +31,15 @@ namespace WebShop.Controllers
         [Route("get-profile-picture")]
         public async Task<IActionResult> GetProfilePicture()
         {
-            var operationResult = await profilePictureService.GetProfilePictureAsync(User.GetId());
+            var operationResult = await applicationUserManager.GetProfilePictureAsync(User.GetId());
 
             if (!operationResult.IsSuccessful)
             {
                 return this.Error(operationResult);
             }
+
             byte[] imageBytes = Convert.FromBase64String(operationResult.Data);
+
             return File(imageBytes, "image/png");
         }
 
@@ -61,7 +57,7 @@ namespace WebShop.Controllers
             var fileBytes = memoryStream.ToArray();
             string base64String = Convert.ToBase64String(fileBytes);
 
-            var operationResult = await profilePictureService.UpdateProfilePictureAsync(User.GetId(), base64String);
+            var operationResult = await applicationUserManager.UpdateProfilePictureAsync(User.GetId(), base64String);
 
             if (!operationResult.IsSuccessful)
             {

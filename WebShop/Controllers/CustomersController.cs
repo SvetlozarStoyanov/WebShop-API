@@ -75,6 +75,5 @@ namespace WebShop.Controllers
 
             return Ok(operationResult.Data);
         }
-        
     }
 }
