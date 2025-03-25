@@ -3,7 +3,6 @@ using Contracts.Services.Entity.Addresses;
 using Database.Entities.Addresses;
 using Database.Entities.Common.Enums.Statuses;
 using Database.Entities.Common.Nomenclatures.Statuses;
-using Database.Entities.PhoneNumbers;
 using Models.Common;
 using Models.Common.Enums;
 using Models.Dto.Addresses.Input;
@@ -20,6 +19,7 @@ namespace Services.Entity.Addresses
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<IEnumerable<AddressDetailsDto>>> GetCustomerAddressesAsync(string userId)
         {
             var operationResult = new OperationResult<IEnumerable<AddressDetailsDto>>();
@@ -48,6 +48,7 @@ namespace Services.Entity.Addresses
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> UpdateCustomerAddressesAsync(ICollection<Address> addresses, IEnumerable<AddressUpdateDto> addressUpdateDtos)
         {
             var operationResult = new OperationResult();
@@ -164,6 +165,7 @@ namespace Services.Entity.Addresses
 
             return operationResult;
         }
+
 
         private OperationResult DeleteAddress(long id, AddressStatus archivedStatus, ICollection<Address> addresses)
         {

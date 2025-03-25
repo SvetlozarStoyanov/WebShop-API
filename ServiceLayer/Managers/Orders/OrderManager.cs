@@ -11,6 +11,9 @@ using Models.Dto.Orders.Input;
 
 namespace Services.Managers.Orders
 {
+    /// <summary>
+    /// Performs <see cref="Order"/> related operations
+    /// </summary>
     public class OrderManager : IOrderManager
     {
         private readonly IUnitOfWork unitOfWork;
@@ -29,6 +32,7 @@ namespace Services.Managers.Orders
             this.customerService = customerService;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> PlaceOrderAsync(string userId, OrderCreateDto orderCreateDto)
         {
             var operationResult = new OperationResult();
@@ -67,6 +71,7 @@ namespace Services.Managers.Orders
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> CancelOrderAsync(string userId, long orderId)
         {
             var operationResult = new OperationResult();

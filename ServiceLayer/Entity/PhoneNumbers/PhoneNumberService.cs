@@ -19,6 +19,7 @@ namespace Services.Entity.PhoneNumbers
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<IEnumerable<PhoneNumberDetailsDto>>> GetCustomerPhoneNumbersAsync(string userId)
         {
             var operationResult = new OperationResult<IEnumerable<PhoneNumberDetailsDto>>();
@@ -42,6 +43,7 @@ namespace Services.Entity.PhoneNumbers
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> UpdateCustomerPhoneNumbersAsync(ICollection<PhoneNumber> phoneNumbers, IEnumerable<PhoneNumberUpdateDto> phoneNumberUpdateDtos)
         {
             var operationResult = new OperationResult();

@@ -1,6 +1,5 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
 using Contracts.Services.ProfilePictures;
-using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
 
@@ -15,6 +14,7 @@ namespace Services.ProfilePictures
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<string?>> GetProfilePictureAsync(string userId)
         {
             var operationResult = new OperationResult<string?>();
@@ -31,6 +31,7 @@ namespace Services.ProfilePictures
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> UpdateProfilePictureAsync(string userId, string profilePicture)
         {
             var operationResult = new OperationResult();

@@ -1,5 +1,4 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
-using Contracts.Services.Common.Helpers;
 using Contracts.Services.Entity.Addresses;
 using Contracts.Services.Entity.ApplicationUsers;
 using Contracts.Services.Entity.Countries;
@@ -11,13 +10,14 @@ using Contracts.Services.Entity.PhoneNumbers;
 using Contracts.Services.Entity.Products;
 using Contracts.Services.Identity;
 using Contracts.Services.JWT;
+using Contracts.Services.Managers.ApplicationUsers;
 using Contracts.Services.Managers.Customers;
 using Contracts.Services.Managers.Orders;
+using Contracts.Services.Managers.Products;
 using Contracts.Services.ProfilePictures;
 using Contracts.Services.Seeding;
 using DataAccess.UnitOfWork;
 using Models.Configuration;
-using ServiceLayer.Common.Helpers;
 using Services.Entity.Addresses;
 using Services.Entity.ApplicationUsers;
 using Services.Entity.Countries;
@@ -29,8 +29,10 @@ using Services.Entity.PhoneNumbers;
 using Services.Entity.Products;
 using Services.Identity.UserManager;
 using Services.JWT;
+using Services.Managers.ApplicationUsers;
 using Services.Managers.Customers;
 using Services.Managers.Orders;
+using Services.Managers.Products;
 using Services.ProfilePictures;
 using Services.Seeding;
 using WebShop.Middleware;
@@ -91,7 +93,9 @@ namespace WebShop.Extensions
 
         private static void AddManagerServices(IServiceCollection services)
         {
+            services.AddScoped<IApplicationUserManager, ApplicationUserManager>();
             services.AddScoped<ICustomerManager, CustomerManager>();
+            services.AddScoped<IProductManager, ProductManager>();
             services.AddScoped<IOrderManager, OrderManager>();
         }
 
@@ -112,7 +116,7 @@ namespace WebShop.Extensions
 
         private static void AddHelpers(IServiceCollection services)
         {
-            services.AddScoped<IEnumMapper, EnumMapper>();
+            
         }
 
         private static void AddDataAccess(IServiceCollection services)

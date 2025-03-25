@@ -18,6 +18,7 @@ namespace Services.Entity.InventoryTransactions
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> CreateInventoryTransactionsFromCancelledOrderAsync(Order order)
         {
             var operationResult = new OperationResult();
@@ -46,6 +47,7 @@ namespace Services.Entity.InventoryTransactions
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> CreateInventoryTransactionsFromOrderAsync(Order order)
         {
             var operationResult = new OperationResult();

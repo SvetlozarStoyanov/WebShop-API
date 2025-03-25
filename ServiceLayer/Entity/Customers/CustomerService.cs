@@ -32,6 +32,7 @@ namespace Services.Entity.Customers
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> CreateCustomerAsync(ApplicationUser user, CustomerRegisterDto customerRegisterDto)
         {
             var operationResult = new OperationResult();
@@ -74,12 +75,10 @@ namespace Services.Entity.Customers
 
             await unitOfWork.CustomerRepository.AddAsync(customer);
 
-            // Commented because save changes is called elsewhere in the logic this method is used in
-            //await unitOfWork.SaveChangesAsync();
-
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<Customer>> GetCustomerWithOrdersAsync(string userId)
         {
             var operationResult = new OperationResult<Customer>();
@@ -96,6 +95,7 @@ namespace Services.Entity.Customers
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<Customer>> GetCustomerWithAddressesAsync(string userId)
         {
             var operationResult = new OperationResult<Customer>();
@@ -113,6 +113,7 @@ namespace Services.Entity.Customers
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<Customer>> GetCustomerWithPhoneNumbersAsync(string userId)
         {
             var operationResult = new OperationResult<Customer>();
@@ -130,6 +131,7 @@ namespace Services.Entity.Customers
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<Customer>> GetCustomerWithEmailsAsync(string userId)
         {
             var operationResult = new OperationResult<Customer>();
@@ -147,7 +149,7 @@ namespace Services.Entity.Customers
             return operationResult;
         }
 
-
+        ///<inheritdoc/>
         public async Task<OperationResult<CustomerDetailsDto>> GetCustomerDetailsAsync(string userId)
         {
             var operationResult = new OperationResult<CustomerDetailsDto>();

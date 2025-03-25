@@ -17,6 +17,7 @@ namespace Services.Entity.Products
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<IEnumerable<ProductListDto>> GetAllProductsAsync()
         {
             var productDtos = await unitOfWork.ProductRepository.AllAsNoTracking()
@@ -34,6 +35,7 @@ namespace Services.Entity.Products
             return productDtos;
         }
 
+        ///<inheritdoc/>
         public async Task<ProductsQueryOutputDto> GetFilteredProductsAsync(ProductsQueryInputDto productsQueryInputDto)
         {
             var productsQueryable = unitOfWork.ProductRepository.AllAsNoTracking();

@@ -21,6 +21,7 @@ namespace Services.Entity.Orders
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<Order>> CreateOrderAsync(OrderCreateDto orderCreateDto)
         {
             var operationResult = new OperationResult<Order>();
@@ -106,6 +107,7 @@ namespace Services.Entity.Orders
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<Order>> CancelOrderAsync(long id)
         {
             var operationResult = new OperationResult<Order>();

@@ -17,6 +17,7 @@ namespace Services.JWT
             this.options = options;
         }
 
+        ///<inheritdoc/>
         public string GenerateJwtToken(string userId, string userName)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.Key));

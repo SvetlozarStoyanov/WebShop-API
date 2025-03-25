@@ -3,7 +3,6 @@ using Contracts.Services.Entity.Emails;
 using Database.Entities.Common.Enums.Statuses;
 using Database.Entities.Common.Nomenclatures.Statuses;
 using Database.Entities.Emails;
-using Database.Entities.PhoneNumbers;
 using Models.Common;
 using Models.Common.Enums;
 using Models.Dto.Emails.Input;
@@ -20,6 +19,7 @@ namespace Services.Entity.Emails
             this.unitOfWork = unitOfWork;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult<IEnumerable<EmailDetailsDto>>> GetCustomerEmailsAsync(string userId)
         {
             var operationResult = new OperationResult<IEnumerable<EmailDetailsDto>>();
@@ -42,6 +42,7 @@ namespace Services.Entity.Emails
             return operationResult;
         }
 
+        ///<inheritdoc/>
         public async Task<OperationResult> UpdateCustomerEmailsAsync(ICollection<Email> emails, IEnumerable<EmailUpdateDto> emailUpdateDtos)
         {
             var operationResult = new OperationResult();
